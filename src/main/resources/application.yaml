@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: elib
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/elib}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:iamdeadlytired795795}
+
+server:
+  port: 8085
