@@ -1,6 +1,6 @@
 package com.example.elib.common.validation.anotations.rule;
 
-import com.example.elib.common.validation.CommonLetters;
+import com.example.elib.common.validation.anotations.CommonLetters;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
