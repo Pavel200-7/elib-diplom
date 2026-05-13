@@ -13,6 +13,7 @@ import com.example.elib.user.vo.Contact;
 import com.example.elib.user.vo.PersonalData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public UserDto createUser(CreateUserDto dto) {
         if (repository.existsByContactEmail(dto.getEmail())) {
             throw new DuplicateResourceException("Пользователь с таким email уже существует.");
@@ -41,6 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDto getUser(UUID id) {
         User user = repository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Пользователь с таким id не найден."));
@@ -48,6 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto updateUser(UUID id, UpdateUserDto dto) {
         User user = repository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Пользователь с таким id не найден."));
@@ -62,6 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto activateUser(UUID id) {
         User user = repository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Пользователь с таким id не найден."));

@@ -2,7 +2,7 @@ package com.example.elib.booking.entity;
 
 import com.example.elib.booking.enums.BookingStatus;
 import com.example.elib.common.entity.BaseEntity;
-import com.example.elib.copy.Copy;
+import com.example.elib.copy.entity.Copy;
 import com.example.elib.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

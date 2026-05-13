@@ -32,12 +32,9 @@ public class PublishingServiceImpl implements PublishingService {
     @Override
     @Transactional
     public PublishingDto createPublishing(CreatePublishingDto dto) {
-        // Проверка уникальности названия
         if (publishingRepository.existsByName(dto.getName())) {
             throw new DuplicateResourceException("Издательство с названием '" + dto.getName() + "' уже существует.");
         }
-
-        // Проверка существования страны
         Country country = countryRepository.findById(dto.getCountryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Страна с id " + dto.getCountryId() + " не найдена."));
 
@@ -47,17 +44,12 @@ public class PublishingServiceImpl implements PublishingService {
     }
 
     @Override
-    @Transactional
     public PublishingDto updatePublishing(UUID id, UpdatePublishingDto dto) {
         Publishing publishing = publishingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Издательство с id " + id + " не найдено."));
-
-        // Проверка уникальности названия (если изменилось)
         if (!publishing.getName().equals(dto.getName()) && publishingRepository.existsByName(dto.getName())) {
             throw new DuplicateResourceException("Издательство с названием '" + dto.getName() + "' уже существует.");
         }
-
-        // Проверка существования страны (если изменилась)
         Country country = null;
         if (publishing.getCountry() == null || !publishing.getCountry().getId().equals(dto.getCountryId())) {
             country = countryRepository.findById(dto.getCountryId())

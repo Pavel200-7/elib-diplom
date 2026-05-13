@@ -11,8 +11,7 @@ public enum HolderType {
     RACK("rack"),
     DEPOSITORY("depository"),
     DISPLAY("display"),
-    LOCKER("locker"),
-    TEMPORARY("temporary");
+    LOCKER("locker");
 
     private final String label;
 }

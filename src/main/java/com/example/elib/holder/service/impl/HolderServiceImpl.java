@@ -1,7 +1,9 @@
 package com.example.elib.holder.service.impl;
 
 import com.example.elib.common.exeption.DuplicateResourceException;
+import com.example.elib.common.exeption.ReferentialIntegrityException;
 import com.example.elib.common.exeption.ResourceNotFoundException;
+import com.example.elib.copy.repository.CopyRepository;
 import com.example.elib.holder.dto.request.CreateHolderDto;
 import com.example.elib.holder.dto.request.UpdateHolderDto;
 import com.example.elib.holder.dto.response.HolderDto;
@@ -24,6 +26,7 @@ public class HolderServiceImpl implements HolderService {
 
     private final HolderRepository holderRepository;
     private final RoomRepository roomRepository;
+    private final CopyRepository copyRepository;
     private final HolderMapper holderMapper;
 
     @Override
@@ -82,11 +85,9 @@ public class HolderServiceImpl implements HolderService {
     public void deleteHolder(UUID id) {
         Holder holder = holderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Место хранения с id " + id + " не найдено."));
-
-        // TODO: проверить, есть ли ссылки на этот Holder из Copy
-        // if (copyRepository.existsByHolderId(id)) {
-        //     throw new ReferentialIntegrityException("Невозможно удалить место хранения, так как есть привязанные экземпляры книг.");
-        // }
+         if (copyRepository.existsByHolderId(id)) {
+             throw new ReferentialIntegrityException("Невозможно удалить место хранения, так как есть привязанные экземпляры книг.");
+         }
 
         holderRepository.delete(holder);
     }
