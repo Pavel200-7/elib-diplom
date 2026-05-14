@@ -58,4 +58,10 @@ public class BookController {
         Page<BookShortDto> result = bookService.getBooksPage(criteria);
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/{id}/available/count")
+    public ResponseEntity<Integer> getAvailableCount(@PathVariable UUID id) {
+        Integer result = bookService.getAvailableCount(id);
+        return ResponseEntity.ok(result);
+    }
 }

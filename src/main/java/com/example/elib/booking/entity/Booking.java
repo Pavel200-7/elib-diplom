@@ -16,7 +16,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "bookings")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Booking extends BaseEntity {
 
     @Id

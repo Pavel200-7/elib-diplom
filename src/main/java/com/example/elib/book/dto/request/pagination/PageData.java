@@ -13,9 +13,9 @@ import java.util.UUID;
 public class PageData {
 
     @Min(0)
-    private int page;
+    private Integer page;
 
     @Min(0)
     @Max(100)
-    private int size;
+    private Integer size;
 }

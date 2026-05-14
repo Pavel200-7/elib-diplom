@@ -11,7 +11,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "rooms")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Room extends BaseEntity {
 
     @Id

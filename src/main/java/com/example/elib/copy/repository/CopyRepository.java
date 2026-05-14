@@ -15,4 +15,5 @@ public interface CopyRepository extends JpaRepository<Copy, UUID> {
     boolean existsByInventoryNumber(String existsByInventoryNumber);
     List<Copy> findByBookIdAndStatus(UUID bookId, CopyStatus status);
     boolean existsByBookId(UUID id);
+    long countByBookIdAndStatus(UUID bookId, CopyStatus status);
 }

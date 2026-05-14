@@ -19,7 +19,6 @@ public class BookingDto {
     UUID id;
     UserDto user;
     CopyDto copy;
-    LocalDateTime created;
     LocalDateTime started;
     LocalDateTime finishing;
     LocalDateTime finished;

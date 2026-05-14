@@ -18,6 +18,7 @@ import com.example.elib.book.service.BookService;
 import com.example.elib.common.exeption.DuplicateResourceException;
 import com.example.elib.common.exeption.ReferentialIntegrityException;
 import com.example.elib.common.exeption.ResourceNotFoundException;
+import com.example.elib.copy.enums.CopyStatus;
 import com.example.elib.copy.repository.CopyRepository;
 import com.example.elib.genre.entity.Genre;
 import com.example.elib.genre.repository.GenreRepository;
@@ -170,6 +171,16 @@ public class BookServiceImpl implements BookService {
 
         Page<Book> bookPage = bookRepository.findAll(spec, pageRequest);
         return bookPage.map(bookMapper::toShortDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Integer getAvailableCount(UUID id) {
+        if (!bookRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Книга с id " + id + " не найдена.");
+        }
+        long count = copyRepository.countByBookIdAndStatus(id, CopyStatus.AVAILABLE);
+        return (int) count;
     }
 
     private PageRequest buildPageRequest(PageData pageData, BookSortCriteria sortCriteria) {

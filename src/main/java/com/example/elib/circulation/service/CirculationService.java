@@ -1,7 +1,6 @@
 package com.example.elib.circulation.service;
 
 import com.example.elib.booking.dto.response.BookingDto;
-import com.example.elib.copy.dto.response.CopyDto;
 
 import java.util.UUID;
 

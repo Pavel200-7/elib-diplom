@@ -6,6 +6,40 @@ spring:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/elib}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:iamdeadlytired795795}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost/auth/realms/oAuth}
+
+app:
+  keycloak:
+    client-id: ${KEYCLOAK_CLIENT_ID:myclient}
+    client-secret: ${KEYCLOAK_CLIENT_SECRET:sYXnZMAiSY4ouudztjv73iHyPr5H0dQC}
+    out-uri: ${KEYCLOAK_ISSUER_URI:http://localhost/auth/realms/oAuth}
+    docker-uri: ${KEYCLOAK_ISSUER_URI:http://localhost/auth/realms/oAuth}
+    backend-callback-uri: ${BACKEND_CALLBACK_URI:http://localhost:8085/api/v1/auth/callback}
+    frontend-redirect-uri: ${FRONTEND_REDIRECT_URI:http://localhost:5173/callback}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operationsSorter: method      # сортировка по HTTP методу (GET, POST...)
+    tagsSorter: alpha             # сортировка тегов по алфавиту
+    tryItOutEnabled: true         # кнопка "Try it out" активна по умолчанию
+    filter: true                  # поле поиска по API
+    doc-expansion: none           # сворачиваем все разделы при загрузке
+    display-request-duration: true # показывать длительность запроса
+  show-actuator: false
+  writer-with-default-prettify: true
 
 server:
   port: 8085

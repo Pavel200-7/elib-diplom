@@ -17,4 +17,5 @@ public interface BookService {
     List<BookShortDto> getAllBooks();
     void deleteBook(UUID id);
     Page<BookShortDto> getBooksPage(GetBookCriteriaDto criteria);
+    Integer getAvailableCount(UUID id);
 }

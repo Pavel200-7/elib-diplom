@@ -1,7 +1,6 @@
 package com.example.elib.user.entity;
 
 import com.example.elib.common.entity.BaseEntity;
-import com.example.elib.common.exeption.BusinessRuleException;
 import com.example.elib.user.enums.UserStatus;
 import com.example.elib.user.vo.Contact;
 import com.example.elib.user.vo.PersonalData;
@@ -15,7 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "users")
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 
     @Id
@@ -41,6 +40,13 @@ public class User extends BaseEntity {
         this.id = id;
         this.contact = contact;
         this.status = UserStatus.CREATED;
+        this.readerBookNumber = generateReaderBookNumberFromId(id);
+    }
+
+    private String generateReaderBookNumberFromId(UUID id) {
+        long highBits = id.getMostSignificantBits();
+        long number = Math.abs(highBits % 10_000_000);
+        return String.format("%07d", number);
     }
 
     public static User register(Contact contact, UUID id) {
