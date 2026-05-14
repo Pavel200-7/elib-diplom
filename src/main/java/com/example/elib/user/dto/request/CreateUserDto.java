@@ -9,7 +9,7 @@ import java.util.UUID;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class CreateUserDto {
-    private UUID id;
-    private String email;
-    private String phone;
+    UUID id;
+    String email;
+    String phone;
 }

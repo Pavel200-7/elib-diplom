@@ -1,0 +1,19 @@
+package com.example.elib.booking.service;
+
+import com.example.elib.booking.dto.request.CreateBookingDto;
+import com.example.elib.booking.dto.request.GetBookingCriteria;
+import com.example.elib.booking.dto.response.BookingDto;
+
+import java.util.List;
+import java.util.UUID;
+
+public interface BookingService {
+    BookingDto makeReservation(CreateBookingDto dto);
+    BookingDto cancelReservation(UUID id);
+    BookingDto makeIssue(CreateBookingDto dto);
+    BookingDto issue(UUID id);
+    BookingDto makeReturning(UUID id);
+    BookingDto getBooking(UUID id);
+    List<BookingDto> getUserBookings(GetBookingCriteria criteria);
+    List<BookingDto> getActiveUserBookings(UUID userId);
+}

@@ -19,7 +19,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "books")
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Book extends BaseEntity {
 

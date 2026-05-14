@@ -22,4 +22,5 @@ public interface CopyService {
     CopyDto setShelved(UUID id);
     CopyDto setWrittenOff(UUID id);
     CopyDto getCopy(UUID id);
+    CopyDto getRandomAvailableCopyByBookId(UUID bookId);
 }

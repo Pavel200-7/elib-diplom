@@ -1,11 +1,14 @@
 package com.example.elib.book.controller;
 
 import com.example.elib.book.dto.request.CreateBookDto;
+import com.example.elib.book.dto.request.GetBookCriteriaDto;
 import com.example.elib.book.dto.request.UpdateBookDto;
 import com.example.elib.book.dto.response.BookDto;
 import com.example.elib.book.dto.response.BookShortDto;
 import com.example.elib.book.service.BookService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,5 +51,11 @@ public class BookController {
     public ResponseEntity<Void> deleteBook(@PathVariable UUID id) {
         bookService.deleteBook(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/page")
+    public ResponseEntity<Page<BookShortDto>> getBooksPage(@Valid @RequestBody GetBookCriteriaDto criteria) {
+        Page<BookShortDto> result = bookService.getBooksPage(criteria);
+        return ResponseEntity.ok(result);
     }
 }

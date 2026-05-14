@@ -9,8 +9,8 @@ import java.time.LocalDate;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class UpdateUserDto {
-    private String firstName;
-    private String lastName;
-    private String patronymic;
-    private LocalDate birthDate;
+    String firstName;
+    String lastName;
+    String patronymic;
+    LocalDate birthDate;
 }

@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
@@ -182,6 +183,22 @@ public class CopyServiceImpl implements CopyService {
                 id, copy.getStatus(), newStatus, event);
 
         return copyMapper.toDto(copy);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CopyDto getRandomAvailableCopyByBookId(UUID bookId) {
+        if (!bookRepository.existsById(bookId)) {
+            throw new ResourceNotFoundException("Книга с id " + bookId + " не найдена.");
+        }
+
+        List<Copy> availableCopies = copyRepository.findByBookIdAndStatus(bookId, CopyStatus.AVAILABLE);
+        if (availableCopies.isEmpty()) {
+            throw new ResourceNotFoundException("Нет доступных экземпляров для книги с id " + bookId);
+        }
+
+        Copy randomCopy = availableCopies.get(ThreadLocalRandom.current().nextInt(availableCopies.size()));
+        return copyMapper.toDto(randomCopy);
     }
 
 }

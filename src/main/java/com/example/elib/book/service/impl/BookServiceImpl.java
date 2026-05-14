@@ -3,15 +3,22 @@ package com.example.elib.book.service.impl;
 import com.example.elib.author.entity.Author;
 import com.example.elib.author.repository.AuthorRepository;
 import com.example.elib.book.dto.request.CreateBookDto;
+import com.example.elib.book.dto.request.GetBookCriteriaDto;
 import com.example.elib.book.dto.request.UpdateBookDto;
+import com.example.elib.book.dto.request.pagination.BookSearchCriteria;
+import com.example.elib.book.dto.request.pagination.BookSortCriteria;
+import com.example.elib.book.dto.request.pagination.PageData;
 import com.example.elib.book.dto.response.BookDto;
 import com.example.elib.book.dto.response.BookShortDto;
 import com.example.elib.book.entity.Book;
 import com.example.elib.book.mapper.BookMapper;
 import com.example.elib.book.repository.BookRepository;
+import com.example.elib.book.repository.spec.BookSpecificationBuilder;
 import com.example.elib.book.service.BookService;
 import com.example.elib.common.exeption.DuplicateResourceException;
+import com.example.elib.common.exeption.ReferentialIntegrityException;
 import com.example.elib.common.exeption.ResourceNotFoundException;
+import com.example.elib.copy.repository.CopyRepository;
 import com.example.elib.genre.entity.Genre;
 import com.example.elib.genre.repository.GenreRepository;
 import com.example.elib.language.entity.Language;
@@ -21,6 +28,12 @@ import com.example.elib.literaturegroup.repository.LiteratureGroupRepository;
 import com.example.elib.publishing.entity.Publishing;
 import com.example.elib.publishing.repository.PublishingRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.SortDirection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +51,10 @@ public class BookServiceImpl implements BookService {
     private final PublishingRepository publishingRepository;
     private final LanguageRepository languageRepository;
     private final BookMapper bookMapper;
+    private final CopyRepository copyRepository;
+    private final BookSpecificationBuilder specBuilder;
+
+
 
     @Override
     @Transactional
@@ -134,12 +151,46 @@ public class BookServiceImpl implements BookService {
     public void deleteBook(UUID id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Книга с id " + id + " не найдена."));
-
-        // TODO: проверить, есть ли ссылки на эту книгу из Copy
-        // if (copyRepository.existsByBookId(id)) {
-        //     throw new ReferentialIntegrityException("Невозможно удалить книгу, так как есть привязанные экземпляры.");
-        // }
+         if (copyRepository.existsByBookId(id)) {
+             throw new ReferentialIntegrityException("Невозможно удалить книгу, так как есть привязанные экземпляры.");
+         }
 
         bookRepository.delete(book);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<BookShortDto> getBooksPage(GetBookCriteriaDto criteria) {
+        BookSearchCriteria searchCriteria = criteria.getSearchCriteria();
+        BookSortCriteria sortCriteria = criteria.getSortCriteria();
+        PageData pageData = criteria.getPageData();
+
+        Specification<Book> spec = specBuilder.fromCriteria(searchCriteria);
+        PageRequest pageRequest = buildPageRequest(pageData, sortCriteria);
+
+        Page<Book> bookPage = bookRepository.findAll(spec, pageRequest);
+        return bookPage.map(bookMapper::toShortDto);
+    }
+
+    private PageRequest buildPageRequest(PageData pageData, BookSortCriteria sortCriteria) {
+        int page = pageData != null ? pageData.getPage() : 0;
+        int size = pageData != null && pageData.getSize() > 0 ? pageData.getSize() : 20;
+
+        if (sortCriteria == null || sortCriteria.getSortBy() == null) {
+            return PageRequest.of(page, size, Sort.by("name").ascending());
+        }
+
+        String sortField = switch (sortCriteria.getSortBy()) {
+            case NAME -> "name";
+            case PUBLICATION_YEAR -> "publicationYear";
+            case CREATED_AT -> "createdAt";
+            case UPDATED_AT -> "updatedAt";
+        };
+
+        Sort.Direction direction = sortCriteria.getSortDirection() != null
+                ? sortCriteria.getSortDirection()
+                : Sort.Direction.ASC;
+
+        return PageRequest.of(page, size, Sort.by(direction, sortField));
     }
 }
