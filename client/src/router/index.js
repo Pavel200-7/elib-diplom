@@ -1,11 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+const AUTH_URL = `${API_BASE_URL}/api/v1/auth/authorize`
+
 // Лэйауты
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 
 // Страницы
 import HomeView from '@/views/HomeView.vue'
+import CallbackView from '@/views/CallbackView.vue'
 
 const routes = [
     {
@@ -15,13 +19,83 @@ const routes = [
             {
                 path: '',
                 name: 'Home',
-                component: HomeView
+                component: HomeView,
+                meta: { public: true }
             },
             {
-                path: '/callback',
+                path: 'callback',
                 name: 'Callback',
-                component: () => import('@/views/CallbackView.vue'),
+                component: CallbackView,
                 meta: { public: true }
+            },
+            // {
+            //     path: 'search',
+            //     name: 'SearchResults',
+            //     component: () => import('@/views/SearchResultsView.vue'),
+            //     meta: { public: true }
+            // },
+            // {
+            //     path: 'book/:id',
+            //     name: 'BookDetail',
+            //     component: () => import('@/views/BookDetailView.vue'),
+            //     meta: { public: true }
+            // },
+            // {
+            //     path: 'circulation',
+            //     name: 'Circulation',
+            //     component: () => import('@/views/CirculationView.vue'),
+            //     meta: { requiresAuth: true }
+            // },
+            // {
+            //     path: 'reader',
+            //     name: 'Reader',
+            //     component: () => import('@/views/ReaderView.vue'),
+            //     meta: { requiresAuth: true }
+            // }
+        ]
+    },
+    {
+        path: '/admin',
+        component: () => import('@/views/admin/AdminDashboard.vue'),
+        meta: { requiresAuth: true, roles: ['ADMIN', 'MANAGER'] },
+        children: [
+            {
+                path: '',
+                redirect: '/admin/dictionaries/countries'
+            },
+            // Простые справочники
+            {
+                path: 'dictionaries/:entity',
+                name: 'DictionaryCrud',
+                component: () => import('@/views/admin/dictionaries/DictionaryCrud.vue'),
+                props: true
+            },
+            // Нетиповые справочники
+            {
+                path: 'authors',
+                name: 'AdminAuthors',
+                component: () => import('@/views/admin/authors/AuthorsList.vue')
+            },
+            {
+                path: 'publishings',
+                name: 'AdminPublishings',
+                component: () => import('@/views/admin/publishings/PublishingsList.vue')
+            },
+            {
+                path: 'holders',
+                name: 'AdminHolders',
+                component: () => import('@/views/admin/holders/HoldersList.vue')
+            },
+            // Управление
+            {
+                path: 'books',
+                name: 'AdminBooks',
+                component: () => import('@/views/admin/books/BooksList.vue')
+            },
+            {
+                path: 'copies',
+                name: 'AdminCopies',
+                component: () => import('@/views/admin/copies/CopiesList.vue')
             }
         ]
     }
@@ -36,20 +110,40 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const authStore = useAuthStore()
     
-    // ✅ Публичные маршруты пропускаем без проверки
-    if (to.path === '/callback' || to.meta.public) {  // ← явно добавим /callback
+    // Callback всегда пропускаем
+    if (to.path === '/callback') {
+        console.log('[Router] Callback route, proceeding')
         next()
         return
     }
     
-    if (!authStore.isAuthenticated) {
-        sessionStorage.setItem('redirectAfterLogin', to.fullPath)
-        window.location.href = 'http://localhost:8085/api/v1/auth/authorize'
+    // Публичные маршруты
+    if (to.meta.public) {
+        console.log('[Router] Public route:', to.path)
+        next()
         return
     }
     
+    // Защищённые маршруты
+    if (!authStore.isAuthenticated) {
+        console.log('[Router] Not authenticated, redirecting to Keycloak')
+        sessionStorage.setItem('redirectAfterLogin', to.fullPath)
+        window.location.href = AUTH_URL
+        return
+    }
+    
+    // Проверка ролей для админки
+    if (to.meta.roles && to.meta.roles.length > 0) {
+        const hasRole = authStore.hasAnyRole(to.meta.roles)
+        if (!hasRole) {
+            console.log('[Router] No required role, redirecting to home')
+            next('/')
+            return
+        }
+    }
+    
+    console.log('[Router] Authenticated, proceeding to:', to.path)
     next()
-    return
 })
 
 export default router

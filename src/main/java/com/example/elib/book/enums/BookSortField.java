@@ -1,6 +1,6 @@
 package com.example.elib.book.enums;
 
-public enum SortField {
+public enum BookSortField {
     NAME,
     PUBLICATION_YEAR,
     CREATED_AT,

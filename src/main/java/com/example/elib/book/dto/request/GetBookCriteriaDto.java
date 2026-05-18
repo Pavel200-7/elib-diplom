@@ -2,7 +2,7 @@ package com.example.elib.book.dto.request;
 
 import com.example.elib.book.dto.request.pagination.BookSearchCriteria;
 import com.example.elib.book.dto.request.pagination.BookSortCriteria;
-import com.example.elib.book.dto.request.pagination.PageData;
+import com.example.elib.common.dto.pagination.PageData;
 import jakarta.validation.Valid;
 import lombok.*;
 

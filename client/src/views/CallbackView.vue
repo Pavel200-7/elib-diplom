@@ -7,17 +7,16 @@
 
 <script setup>
 import { onMounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { ElMessage } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
 
 const router = useRouter()
-const route = useRoute()
 const authStore = useAuthStore()
 
 onMounted(() => {
-    console.log('Callback mounted, hash:', window.location.hash)  // ← добавить лог
+    console.log('CallbackView mounted')
     
     const hash = window.location.hash.substring(1)
     const params = new URLSearchParams(hash)
@@ -26,29 +25,28 @@ onMounted(() => {
     const refreshToken = params.get('refresh_token')
     const error = params.get('error')
     
-    console.log('accessToken:', accessToken ? 'present' : 'missing')  // ← добавить лог
-    
     if (error) {
+        console.error('Auth error:', error)
         ElMessage.error('Ошибка авторизации')
         router.push('/')
         return
     }
     
     if (accessToken && refreshToken) {
-        // Сохраняем токены
+        console.log('Saving tokens...')
         authStore.setTokens(accessToken, refreshToken)
-        console.log('Tokens saved, isAuthenticated:', authStore.isAuthenticated)  // ← добавить лог
         
-        // Временно — заглушка для пользователя
-        authStore.setUser({ email: 'user@example.com' })
+        // Запускаем планировщик автоматического обновления токена
+        authStore.scheduleTokenRefresh()
         
         ElMessage.success('Вход выполнен успешно')
         
         const redirect = sessionStorage.getItem('redirectAfterLogin') || '/'
         sessionStorage.removeItem('redirectAfterLogin')
+        
         router.push(redirect)
     } else {
-        console.error('No tokens in URL hash')  // ← добавить лог
+        console.error('No tokens in URL!')
         ElMessage.error('Не получены токены авторизации')
         router.push('/')
     }

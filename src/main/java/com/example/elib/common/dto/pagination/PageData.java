@@ -1,10 +1,8 @@
-package com.example.elib.book.dto.request.pagination;
+package com.example.elib.common.dto.pagination;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
-
-import java.util.UUID;
 
 @Value
 @Builder

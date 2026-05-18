@@ -1,6 +1,6 @@
-package com.example.elib.book.dto.request.pagination;
+package com.example.elib.copy.dto.request.pagination;
 
-import com.example.elib.book.enums.BookSortField;
+import com.example.elib.copy.enums.CopySortField;
 import lombok.*;
 import org.springframework.data.domain.Sort;
 
@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort;
 @Builder
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class BookSortCriteria {
-    BookSortField sortBy;
+public class CopySortCriteria {
+    CopySortField sortBy;
     Sort.Direction sortDirection;
 }

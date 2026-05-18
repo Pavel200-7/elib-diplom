@@ -1,18 +1,26 @@
 package com.example.elib.copy.service.impl;
 
+import com.example.elib.book.dto.request.pagination.BookSearchCriteria;
+import com.example.elib.book.dto.request.pagination.BookSortCriteria;
 import com.example.elib.book.entity.Book;
 import com.example.elib.book.repository.BookRepository;
+import com.example.elib.common.dto.pagination.PageData;
 import com.example.elib.common.exeption.DuplicateResourceException;
 import com.example.elib.common.exeption.ResourceNotFoundException;
 import com.example.elib.copy.dto.request.CreateCopyDto;
+import com.example.elib.copy.dto.request.GetCopyCriteriaDto;
 import com.example.elib.copy.dto.request.SetRegularHolderDto;
 import com.example.elib.copy.dto.request.UpdateCopyDto;
+import com.example.elib.copy.dto.request.pagination.CopySearchCriteria;
+import com.example.elib.copy.dto.request.pagination.CopySortCriteria;
 import com.example.elib.copy.dto.response.CopyDto;
+import com.example.elib.copy.dto.response.CopyShortDto;
 import com.example.elib.copy.entity.Copy;
 import com.example.elib.copy.enums.CopyEvent;
 import com.example.elib.copy.enums.CopyStatus;
 import com.example.elib.copy.mapper.CopyMapper;
 import com.example.elib.copy.repository.CopyRepository;
+import com.example.elib.copy.repository.spec.CopySpecificationBuilder;
 import com.example.elib.copy.service.CopyService;
 import com.example.elib.copy.sm.CopyStateMachineConfig;
 import com.example.elib.holder.entity.Holder;
@@ -21,6 +29,10 @@ import com.example.elib.room.entity.Room;
 import com.github.oxo42.stateless4j.StateMachine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +51,7 @@ public class CopyServiceImpl implements CopyService {
     private final HolderRepository holderRepository;
     private final CopyMapper copyMapper;
     private final CopyStateMachineConfig stateMachineConfig;
+    private final CopySpecificationBuilder specBuilder;
 
     @Override
     @Transactional
@@ -201,4 +214,34 @@ public class CopyServiceImpl implements CopyService {
         return copyMapper.toDto(randomCopy);
     }
 
+    @Override
+    public Page<CopyShortDto> getCopiesPage(GetCopyCriteriaDto criteria) {
+        CopySearchCriteria searchCriteria = criteria.getSearchCriteria();
+        CopySortCriteria sortCriteria = criteria.getSortCriteria();
+        PageData pageData = criteria.getPageData();
+
+        Specification<Copy> spec = specBuilder.fromCriteria(searchCriteria);
+        PageRequest pageRequest = buildPageRequest(pageData, sortCriteria);
+
+        Page<Copy> copyPage = copyRepository.findAll(spec, pageRequest);
+        return copyPage.map(copyMapper::toShortDto);
+    }
+
+    private PageRequest buildPageRequest(PageData pageData, CopySortCriteria sortCriteria) {
+        int page = pageData != null ? pageData.getPage() : 0;
+        int size = pageData != null && pageData.getSize() > 0 ? pageData.getSize() : 20;
+
+        if (sortCriteria == null || sortCriteria.getSortBy() == null) {
+            return PageRequest.of(page, size, Sort.by("name").ascending());
+        }
+
+        String sortField = sortCriteria.getSortBy()
+                .getFieldName();
+
+        Sort.Direction direction = sortCriteria.getSortDirection() != null
+                ? sortCriteria.getSortDirection()
+                : Sort.Direction.ASC;
+
+        return PageRequest.of(page, size, Sort.by(direction, sortField));
+    }
 }

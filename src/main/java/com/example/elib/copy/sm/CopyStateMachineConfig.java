@@ -10,13 +10,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CopyStateMachineConfig {
 
-    @Bean
-    public StateMachine<CopyStatus, CopyEvent> copyStateMachine() {
-        return createMachine(CopyStatus.ADDED);
+    public StateMachine<CopyStatus, CopyEvent> createMachine(CopyStatus initialState) {
+        return new StateMachine<>(initialState, config);
     }
 
-    @Bean
-    public StateMachine<CopyStatus, CopyEvent> createMachine(CopyStatus initialState) {
+    private final StateMachineConfig<CopyStatus, CopyEvent> config = buildConfig();
+
+    private StateMachineConfig<CopyStatus, CopyEvent> buildConfig() {
         StateMachineConfig<CopyStatus, CopyEvent> config = new StateMachineConfig<>();
 
         config.configure(CopyStatus.ADDED)
@@ -37,6 +37,6 @@ public class CopyStateMachineConfig {
         config.configure(CopyStatus.IN_TRANSIT)
                 .permit(CopyEvent.SHELVE, CopyStatus.AVAILABLE);
 
-        return new StateMachine<>(initialState, config);
+        return config;
     }
 }

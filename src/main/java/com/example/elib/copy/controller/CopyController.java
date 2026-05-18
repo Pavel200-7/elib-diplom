@@ -1,11 +1,16 @@
 package com.example.elib.copy.controller;
 
+import com.example.elib.book.dto.response.BookShortDto;
 import com.example.elib.copy.dto.request.CreateCopyDto;
+import com.example.elib.copy.dto.request.GetCopyCriteriaDto;
 import com.example.elib.copy.dto.request.SetRegularHolderDto;
 import com.example.elib.copy.dto.request.UpdateCopyDto;
 import com.example.elib.copy.dto.response.CopyDto;
+import com.example.elib.copy.dto.response.CopyShortDto;
 import com.example.elib.copy.service.CopyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -99,5 +104,13 @@ public class CopyController {
         CopyDto copy = copyService.getCopy(id);
         return ResponseEntity.ok(copy);
     }
+
+    @PostMapping("/page")
+    public ResponseEntity<Page<CopyShortDto>> getCopyPage(@Valid @RequestBody GetCopyCriteriaDto criteria) {
+        Page<CopyShortDto> result = copyService.getCopiesPage(criteria);
+        return ResponseEntity.ok(result);
+    }
+
+
 
 }

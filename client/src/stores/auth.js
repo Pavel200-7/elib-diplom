@@ -1,76 +1,99 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { tokenManager } from '@/services/auth/tokenManager'
+import { authService } from '@/services/auth/authService'
+
+const AUTH_URL = import.meta.env.VITE_AUTH_URL
 
 export const useAuthStore = defineStore('auth', () => {
-    const accessToken = ref(localStorage.getItem('access_token') || null)
-    const refreshToken = ref(localStorage.getItem('refresh_token') || null)
-    const user = ref(null)
-    const roles = ref([])
+    const accessToken = ref(tokenManager.getAccessToken())
+    const refreshTokenValue = ref(tokenManager.getRefreshToken())  // ← переименовали
+    const user = ref(authService.getCurrentUser())
+    const roles = ref(user.value?.roles || [])
 
-    const isAuthenticated = computed(() => !!accessToken.value)
+    const isAuthenticated = computed(() => tokenManager.isAuthenticated())
+    const isTokenExpired = computed(() => tokenManager.isTokenExpired())
 
     function setTokens(access, refresh) {
-        console.log('setTokens called, access:', access ? 'present' : 'missing')  // ← добавить лог
-
+        tokenManager.setTokens(access, refresh)
         accessToken.value = access
-        refreshToken.value = refresh
-        localStorage.setItem('access_token', access)
-        localStorage.setItem('refresh_token', refresh)
+        refreshTokenValue.value = refresh  // ← обновляем
+        
+        const userData = authService.getCurrentUser()
+        user.value = userData
+        roles.value = userData?.roles || []
     }
 
     function clearTokens() {
+        tokenManager.clearTokens()
         accessToken.value = null
-        refreshToken.value = null
+        refreshTokenValue.value = null
         user.value = null
         roles.value = []
-        localStorage.removeItem('access_token')
-        localStorage.removeItem('refresh_token')
     }
 
-    function setUser(userData) {
-        user.value = userData
-    }
-
-    function setRoles(userRoles) {
-        roles.value = userRoles
+    async function refreshToken() {
+        const success = await authService.refreshToken()
+        if (success) {
+            accessToken.value = tokenManager.getAccessToken()
+            refreshTokenValue.value = tokenManager.getRefreshToken()
+            const userData = authService.getCurrentUser()
+            user.value = userData
+            roles.value = userData?.roles || []
+        }
+        return success
     }
 
     function logout() {
         clearTokens()
-        window.location.href = 'http://localhost:8080/api/v1/auth/authorize'
+        window.location.href = AUTH_URL
     }
 
-    // Проверка роли
     function hasRole(role) {
-        return roles.value.includes(role)
+        return authService.hasRole(role)
     }
 
     function isAdmin() {
-        return hasRole('ADMIN')
+        return authService.isAdmin()
     }
 
-    function isManager() {
-        return hasRole('MANAGER')
+    function hasAnyRole(requiredRoles) {
+        if (!requiredRoles || requiredRoles.length === 0) return true
+        return requiredRoles.some(role => roles.value.includes(role) || roles.value.includes(`ROLE_${role}`))
     }
 
-    function isLibrarian() {
-        return hasRole('LIBRARIAN')
+    function scheduleTokenRefresh() {
+        const expirationTime = tokenManager.getTokenExpirationTime()
+        if (!expirationTime) return
+        
+        const now = Date.now()
+        const timeUntilExpiry = expirationTime - now
+        const refreshTime = timeUntilExpiry - 5 * 60 * 1000
+        
+        if (refreshTime > 0) {
+            setTimeout(async () => {
+                if (tokenManager.isAuthenticated()) {
+                    await refreshToken()
+                    scheduleTokenRefresh()
+                }
+            }, refreshTime)
+        }
     }
 
     return {
         accessToken,
-        refreshToken,
+        refreshToken: refreshTokenValue,  // ← экспортируем под старым именем
         user,
         roles,
         isAuthenticated,
+        isTokenExpired,
         setTokens,
         clearTokens,
-        setUser,
-        setRoles,
+        refreshToken,
         logout,
         hasRole,
         isAdmin,
-        isManager,
-        isLibrarian
+        hasAnyRole,
+        scheduleTokenRefresh
     }
 })
