@@ -1,12 +1,10 @@
 package com.example.elib.copy.service.impl;
 
-import com.example.elib.book.dto.request.pagination.BookSearchCriteria;
-import com.example.elib.book.dto.request.pagination.BookSortCriteria;
 import com.example.elib.book.entity.Book;
 import com.example.elib.book.repository.BookRepository;
 import com.example.elib.common.dto.pagination.PageData;
-import com.example.elib.common.exeption.DuplicateResourceException;
-import com.example.elib.common.exeption.ResourceNotFoundException;
+import com.example.elib.common.exception.DuplicateResourceException;
+import com.example.elib.common.exception.ResourceNotFoundException;
 import com.example.elib.copy.dto.request.CreateCopyDto;
 import com.example.elib.copy.dto.request.GetCopyCriteriaDto;
 import com.example.elib.copy.dto.request.SetRegularHolderDto;
@@ -25,7 +23,6 @@ import com.example.elib.copy.service.CopyService;
 import com.example.elib.copy.sm.CopyStateMachineConfig;
 import com.example.elib.holder.entity.Holder;
 import com.example.elib.holder.repository.HolderRepository;
-import com.example.elib.room.entity.Room;
 import com.github.oxo42.stateless4j.StateMachine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -127,6 +124,13 @@ public class CopyServiceImpl implements CopyService {
     @Override
     @Transactional
     public CopyDto setAvailable(UUID id) {
+        Copy copy = copyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Экземпляр с id " + id + " не найден."));
+
+        if (copy.getHolder() == null) {
+            throw new IllegalStateException("Нельзя сделать доступным экземпляр без установленного постоянного места храниения.");
+        }
+
         return executeTransition(id, CopyEvent.MAKE_AVAILABLE, "AVAILABLE");
     }
 

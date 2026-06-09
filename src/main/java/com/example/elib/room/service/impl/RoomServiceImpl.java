@@ -1,8 +1,8 @@
 package com.example.elib.room.service.impl;
 
-import com.example.elib.common.exeption.DuplicateResourceException;
-import com.example.elib.common.exeption.ReferentialIntegrityException;
-import com.example.elib.common.exeption.ResourceNotFoundException;
+import com.example.elib.common.exception.DuplicateResourceException;
+import com.example.elib.common.exception.ReferentialIntegrityException;
+import com.example.elib.common.exception.ResourceNotFoundException;
 import com.example.elib.holder.repository.HolderRepository;
 import com.example.elib.room.dto.request.CreateRoomDto;
 import com.example.elib.room.dto.request.UpdateRoomDto;

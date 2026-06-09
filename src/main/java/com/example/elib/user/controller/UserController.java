@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,5 +35,11 @@ public class UserController {
     public ResponseEntity<UserDto> activateUser(@PathVariable UUID id) {
         UserDto activatedUser = userService.activateUser(id);
         return ResponseEntity.ok(activatedUser);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserDto>> searchUsers(@RequestParam String query) {
+        List<UserDto> users = userService.searchUsers(query);
+        return ResponseEntity.ok(users);
     }
 }

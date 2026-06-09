@@ -4,12 +4,14 @@ import com.example.elib.user.enums.UserStatus;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Value
 @Builder
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class UserDto {
+    UUID id;
     String readerBookNumber;
     String email;
     String phone;

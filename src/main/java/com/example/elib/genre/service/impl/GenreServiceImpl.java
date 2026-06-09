@@ -1,9 +1,9 @@
 package com.example.elib.genre.service.impl;
 
 import com.example.elib.book.repository.BookRepository;
-import com.example.elib.common.exeption.DuplicateResourceException;
-import com.example.elib.common.exeption.ReferentialIntegrityException;
-import com.example.elib.common.exeption.ResourceNotFoundException;
+import com.example.elib.common.exception.DuplicateResourceException;
+import com.example.elib.common.exception.ReferentialIntegrityException;
+import com.example.elib.common.exception.ResourceNotFoundException;
 import com.example.elib.genre.dto.request.CreateGenreDto;
 import com.example.elib.genre.dto.request.UpdateGenreDto;
 import com.example.elib.genre.dto.response.GenreDto;

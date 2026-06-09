@@ -1,6 +1,10 @@
 <template>
     <div class="admin-container">
         <aside class="admin-sidebar">
+
+            <div class="sidebar-header">
+                <h3><a href="/">Главная</a></h3>
+            </div>
             <div class="sidebar-header">
                 <h3>Навигация</h3>
             </div>
@@ -9,14 +13,14 @@
                 <div class="sidebar-group-title">Справочники</div>
                 <nav class="sidebar-nav">
                     <router-link 
-                        v-for="dict in dictionaries" 
-                        :key="dict.entity"
-                        :to="`/admin/dictionaries/${dict.entity}`"
+                        v-for="item in dictionaries" 
+                        :key="item.path"
+                        :to="item.path"
                         class="sidebar-link"
                         active-class="sidebar-link-active"
                     >
-                        <el-icon><component :is="dict.icon" /></el-icon>
-                        <span>{{ dict.title }}</span>
+                        <el-icon><component :is="item.icon" /></el-icon>
+                        <span>{{ item.title }}</span>
                     </router-link>
                     <router-link 
                         v-for="item in customEntities" 
@@ -58,11 +62,11 @@ import { Flag, Collection, User, OfficeBuilding, Reading, Grid, House, Tickets, 
 
 // Простые справочники (используют универсальный DictionaryCrud)
 const dictionaries = [
-    { entity: 'countries', title: 'Страны', icon: 'Flag' },
-    { entity: 'genres', title: 'Жанры', icon: 'Collection' },
-    { entity: 'languages', title: 'Языки', icon: 'Reading' },
-    { entity: 'literature-groups', title: 'Группы литературы', icon: 'Grid' },
-    { entity: 'rooms', title: 'Помещения', icon: 'House' }
+    { path: '/admin/countries', title: 'Страны', icon: 'Flag' },
+    { path: '/admin/genres', title: 'Жанры', icon: 'Collection' },
+    { path: '/admin/languages', title: 'Языки', icon: 'Reading' },
+    { path: '/admin/literature-groups', title: 'Группы литературы', icon: 'Grid' },
+    { path: '/admin/rooms', title: 'Помещения', icon: 'House' }
 ]
 
 // Нетиповые справочники (имеют отдельные компоненты)

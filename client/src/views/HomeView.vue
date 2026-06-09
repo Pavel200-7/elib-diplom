@@ -14,14 +14,24 @@
             />
         </div>
         
-        <div v-else class="user-info">
+        <div v-else class="info">
             <el-card>
                 <template #header>
                     <span>Добро пожаловать!</span>
                 </template>
-                <p>Email: {{ authStore.user?.email }}</p>
-                <p>Роли: {{ authStore.roles?.join(', ') }}</p>
+                <p>Вы находитесь на главной странице нашего сайта. Здесь вы найдете общие 
+                    характкристики нашего продукта, рекомендации и ответы на 
+                    частозадаваемые вопросы.</p>
             </el-card>
+
+            <el-card>
+                <template #header></template>
+                <p>Elib - это современное решение каталогизации библиотечного фонда, позволяющее легко и удобно 
+                    отслеживать его состояние любому желающему.</p>
+                <p>Если вы читетель, здесь вы сможите подыскать себе книгу в соответствии с вашими интересами, 
+                    а затем указать желение осуществить пользование ею благодаря возможности оформления брони.</p>
+            </el-card>
+
         </div>
     </div>
 </template>
@@ -56,8 +66,12 @@ const authStore = useAuthStore()
     text-align: center;
 }
 
-.user-info {
-    max-width: 400px;
-    margin: 0 auto;
+.info {
+    max-width: 100%;
+    margin: 0 auto; 
+}
+
+.info * {
+    margin-bottom: 10px; 
 }
 </style>

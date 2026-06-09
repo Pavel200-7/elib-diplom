@@ -3,12 +3,15 @@ package com.example.elib.booking.service.impl;
 import com.example.elib.booking.dto.request.CreateBookingDto;
 import com.example.elib.booking.dto.request.GetBookingCriteria;
 import com.example.elib.booking.dto.response.BookingDto;
+import com.example.elib.booking.dto.response.BookingShortDto;
 import com.example.elib.booking.entity.Booking;
+import com.example.elib.booking.enums.BookingStatus;
 import com.example.elib.booking.mapper.BookingMapper;
 import com.example.elib.booking.repository.BookingRepository;
 import com.example.elib.booking.repository.spec.BookingSpecificationBuilder;
 import com.example.elib.booking.service.BookingService;
-import com.example.elib.common.exeption.ResourceNotFoundException;
+import com.example.elib.common.exception.BusinessRuleException;
+import com.example.elib.common.exception.ResourceNotFoundException;
 import com.example.elib.copy.entity.Copy;
 import com.example.elib.copy.repository.CopyRepository;
 import com.example.elib.user.entity.User;
@@ -38,6 +41,11 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(()-> new ResourceNotFoundException("Пользователь с id " + dto.getUserId() + " не найден."));
         Copy copy = copyRepository.findById(dto.getCopyId())
                 .orElseThrow(() -> new ResourceNotFoundException("Экземпляр с id " + dto.getCopyId() + " не найден."));
+
+        Specification<Booking> activeSpec = specBuilder.hasActiveReservationForBook(user.getId(), copy.getBook().getId());
+        if (bookingRepository.exists(activeSpec)) {
+            throw new BusinessRuleException("У вас уже есть активная бронь или выдача на эту книгу");
+        }
 
         Booking booking = Booking.makeReservation(user, copy);
         bookingRepository.save(booking);
@@ -98,10 +106,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional(readOnly = true)
     public List<BookingDto> getUserBookings(GetBookingCriteria criteria) {
-        if (!userRepository.existsById(criteria.getUserId())) {
-            throw new ResourceNotFoundException("Пользователь с id " + criteria.getUserId() + " не найден.");
-        }
-
         Specification<Booking> spec = specBuilder.forUser(criteria);
         List<Booking> bookings = bookingRepository.findAll(spec);
         return bookings.stream()
@@ -120,6 +124,16 @@ public class BookingServiceImpl implements BookingService {
         List<Booking> bookings = bookingRepository.findAll(spec);
         return bookings.stream()
                 .map(bookingMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BookingShortDto> getUserBookingsPage(GetBookingCriteria criteria) {
+        Specification<Booking> spec = specBuilder.fromCriteria(criteria);
+        List<Booking> bookings = bookingRepository.findAll(spec);
+        return bookings.stream()
+                .map(bookingMapper::toShortDto)
                 .toList();
     }
 }

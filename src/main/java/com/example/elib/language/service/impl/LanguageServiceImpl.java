@@ -1,9 +1,9 @@
 package com.example.elib.language.service.impl;
 
 import com.example.elib.book.repository.BookRepository;
-import com.example.elib.common.exeption.DuplicateResourceException;
-import com.example.elib.common.exeption.ReferentialIntegrityException;
-import com.example.elib.common.exeption.ResourceNotFoundException;
+import com.example.elib.common.exception.DuplicateResourceException;
+import com.example.elib.common.exception.ReferentialIntegrityException;
+import com.example.elib.common.exception.ResourceNotFoundException;
 import com.example.elib.language.dto.request.CreateLanguageDto;
 import com.example.elib.language.dto.request.UpdateLanguageDto;
 import com.example.elib.language.dto.response.LanguageDto;

@@ -76,7 +76,7 @@
                     <CopyStatusBadge :status="row.status" />
                 </template>
             </el-table-column>
-            <el-table-column prop="holder?.name" label="Место хранения" width="150" />
+            <el-table-column prop="holder.name" label="Место хранения" width="150" />
             <el-table-column label="Действия" width="200" fixed="right">
                 <template #default="{ row }">
                     <!-- ADDED → AVAILABLE -->
@@ -143,11 +143,6 @@
                 <el-form-item label="Книга" prop="bookId">
                     <el-select v-model="form.bookId" filterable placeholder="Выберите книгу" style="width: 100%">
                         <el-option v-for="b in books" :key="b.id" :label="b.name" :value="b.id" />
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="Место хранения" prop="holderId">
-                    <el-select v-model="form.holderId" clearable filterable placeholder="Выберите место" style="width: 100%">
-                        <el-option v-for="h in holders" :key="h.id" :label="h.name" :value="h.id" />
                     </el-select>
                 </el-form-item>
             </el-form>

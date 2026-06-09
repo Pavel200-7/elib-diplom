@@ -1,7 +1,7 @@
 <template>
     <div class="dictionary-crud">
         <div class="header">
-            <h2>{{ title }}</h2>
+            <h2>Группы литературы</h2>
             <el-button type="primary" @click="openCreateDialog">
                 <el-icon><Plus /></el-icon>
                 Создать
@@ -14,7 +14,7 @@
                 :key="field.key" 
                 :prop="field.key" 
                 :label="field.label" 
-                :min-width="field.width || 150"
+                :min-width="150"
             />
             <el-table-column label="Действия" width="150" fixed="right">
                 <template #default="{ row }">
@@ -32,7 +32,7 @@
         <el-dialog :title="dialogTitle" v-model="dialogVisible" width="600px">
             <el-form :model="form" :rules="rules" ref="formRef" label-width="120px">
                 <el-form-item 
-                    v-for="field in config.fields" 
+                    v-for="field in displayFields" 
                     :key="field.key"
                     :label="field.label"
                     :prop="field.key"
@@ -80,20 +80,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, computed, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus, Edit, Delete } from '@element-plus/icons-vue'
-import { dictionaryConfigs } from '@/configs/dictionaryConfigs'
-import * as api from '@/services/api/dictionaries'
+import * as api from '@/services/api/literature-groups.js'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
-
-const route = useRoute()
-const router = useRouter()
-
-// Текущая сущность из URL
-const entity = computed(() => route.params.entity)
-const config = computed(() => dictionaryConfigs[entity.value])
 
 const items = ref([])
 const loading = ref(false)
@@ -105,31 +96,30 @@ const form = ref({})
 const toDelete = ref(null)
 const formRef = ref()
 
-const title = computed(() => config.value?.title || '')
-const displayFields = computed(() => config.value?.fields.filter(f => f.key !== 'roomId') || [])
-const rules = computed(() => {
-    const rulesObj = {}
-    config.value?.fields.forEach(field => {
-        if (field.required) {
-            rulesObj[field.key] = [{ required: true, message: `Введите ${field.label.toLowerCase()}`, trigger: 'blur' }]
-        }
-    })
-    return rulesObj
-})
 
-const dialogTitle = computed(() => isEdit.value ? `Редактировать ${title.value}` : `Создать ${title.value}`)
+const displayFields = [
+    { 
+        key: 'name',          
+        label: 'Название',    
+        type: 'text',          
+        maxLength: 100
+    }
+]
 
-const loadItems = async () => {
-    if (!config.value) return
-    
+const rules = {
+    name: [                   
+        { required: true, message: 'Введите название', trigger: 'blur' }
+    ]
+}
+
+const dialogTitle = computed(() => isEdit.value ? "Редактировать" : "Создать")
+
+const loadItems = async () => {    
     loading.value = true
     try {
-        console.log('Loading items for:', config.value.apiPath)
-        const response = await api.getAll(config.value.apiPath)
-        console.log('Response:', response.data)
+        const response = await api.getAll()
         items.value = response.data
     } catch (error) {
-        console.error('Error loading items:', error)
         ElMessage.error('Ошибка загрузки данных')
     } finally {
         loading.value = false
@@ -156,10 +146,10 @@ const save = async () => {
         const data = { ...form.value }
         
         if (isEdit.value) {
-            await api.update(config.value.apiPath, data.id, data)
+            await api.update(data.id, data)
             ElMessage.success('Обновлено')
         } else {
-            await api.create(config.value.apiPath, data)
+            await api.create(data)
             ElMessage.success('Создано')
         }
         
@@ -179,7 +169,7 @@ const confirmDelete = (row) => {
 
 const deleteItem = async () => {
     try {
-        await api.deleteItem(config.value.apiPath, toDelete.value.id)
+        await api.deleteItem(toDelete.value.id)
         ElMessage.success('Удалено')
         deleteDialogVisible.value = false
         await loadItems()
@@ -188,20 +178,9 @@ const deleteItem = async () => {
     }
 }
 
-// Следим за изменением entity и перезагружаем данные
-watch(entity, () => {
-    if (config.value) {
-        console.log('Entity changed to:', entity.value)
-        loadItems()
-    } else {
-        router.push('/admin')
-    }
-}, { immediate: true })
-
 onMounted(() => {
-    if (!config.value) {
-        router.push('/admin')
-    }
+    loadItems()
+    console.log(items)
 })
 </script>
 

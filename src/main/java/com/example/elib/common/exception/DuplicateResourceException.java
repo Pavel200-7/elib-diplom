@@ -1,4 +1,4 @@
-package com.example.elib.common.exeption;
+package com.example.elib.common.exception;
 
 public class DuplicateResourceException extends RuntimeException {
     public DuplicateResourceException(String message){

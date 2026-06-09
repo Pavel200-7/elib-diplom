@@ -4,7 +4,6 @@ import com.example.elib.copy.enums.CopyEvent;
 import com.example.elib.copy.enums.CopyStatus;
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration

@@ -2,6 +2,7 @@ package com.example.elib.booking.controller;
 
 import com.example.elib.booking.dto.request.GetBookingCriteria;
 import com.example.elib.booking.dto.response.BookingDto;
+import com.example.elib.booking.dto.response.BookingShortDto;
 import com.example.elib.booking.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,12 @@ public class BookingController {
     @PostMapping("/user")
     public ResponseEntity<List<BookingDto>> getUserBookings(@RequestBody GetBookingCriteria criteria) {
         List<BookingDto> bookings = bookingService.getUserBookings(criteria);
+        return ResponseEntity.ok(bookings);
+    }
+
+    @PostMapping("/user/page")
+    public ResponseEntity<List<BookingShortDto>> getUserBookingsPage(@RequestBody GetBookingCriteria criteria) {
+        List<BookingShortDto> bookings = bookingService.getUserBookingsPage(criteria);
         return ResponseEntity.ok(bookings);
     }
 

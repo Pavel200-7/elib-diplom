@@ -10,4 +10,5 @@ public interface BookingSpecificationBuilder {
     Specification<Booking> fromCriteria(GetBookingCriteria criteria);
     Specification<Booking> forUser(GetBookingCriteria criteria);
     Specification<Booking> activeForUser(UUID userId);
+    Specification<Booking> hasActiveReservationForBook(UUID userId, UUID bookId);
 }

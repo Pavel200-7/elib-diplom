@@ -23,3 +23,4 @@ export const deleteItem = (id) => {
 export const getAvailableCount = (id) => {
     return client.get(`/api/v1/books/${id}/available/count`)
 }
+

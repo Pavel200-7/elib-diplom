@@ -25,15 +25,27 @@ public class CopyController {
 
     private final CopyService copyService;
 
-    @PostMapping
-    public ResponseEntity<CopyDto> createCopy(@RequestBody CreateCopyDto dto) {
-        CopyDto created = copyService.createCopy(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    @PostMapping("/page")
+    public ResponseEntity<Page<CopyShortDto>> getCopyPage(@Valid @RequestBody GetCopyCriteriaDto criteria) {
+        Page<CopyShortDto> result = copyService.getCopiesPage(criteria);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/batch")
     public ResponseEntity<List<CopyDto>> createCopies(@RequestBody List<CreateCopyDto> dtos) {
         List<CopyDto> created = copyService.createCopies(dtos);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    @PatchMapping("/holder")
+    public ResponseEntity<List<CopyDto>> setRegularHolder(@RequestBody SetRegularHolderDto dto) {
+        List<CopyDto> updated = copyService.setRegularHolder(dto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PostMapping
+    public ResponseEntity<CopyDto> createCopy(@RequestBody CreateCopyDto dto) {
+        CopyDto created = copyService.createCopy(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -51,51 +63,15 @@ public class CopyController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/holder")
-    public ResponseEntity<List<CopyDto>> setRegularHolder(@RequestBody SetRegularHolderDto dto) {
-        List<CopyDto> updated = copyService.setRegularHolder(dto);
-        return ResponseEntity.ok(updated);
-    }
-
     @PatchMapping("/{id}/available")
     public ResponseEntity<CopyDto> setAvailable(@PathVariable UUID id) {
         CopyDto updated = copyService.setAvailable(id);
         return ResponseEntity.ok(updated);
     }
 
-//    @PatchMapping("/{id}/reserved")
-//    public ResponseEntity<CopyDto> setReserved(@PathVariable UUID id) {
-//        CopyDto updated = copyService.setReserved(id);
-//        return ResponseEntity.ok(updated);
-//    }
-//
-//    @PatchMapping("/{id}/cancel-reserve")
-//    public ResponseEntity<CopyDto> cancelReserve(@PathVariable UUID id) {
-//        CopyDto updated = copyService.cancelReserve(id);
-//        return ResponseEntity.ok(updated);
-//    }
-//
-//    @PatchMapping("/{id}/issued")
-//    public ResponseEntity<CopyDto> setIssued(@PathVariable UUID id) {
-//        CopyDto updated = copyService.setIssued(id);
-//        return ResponseEntity.ok(updated);
-//    }
-//
-//    @PatchMapping("/{id}/in-transit")
-//    public ResponseEntity<CopyDto> setInTransit(@PathVariable UUID id) {
-//        CopyDto updated = copyService.setInTransit(id);
-//        return ResponseEntity.ok(updated);
-//    }
-
     @PatchMapping("/{id}/shelved")
     public ResponseEntity<CopyDto> setShelved(@PathVariable UUID id) {
         CopyDto updated = copyService.setShelved(id);
-        return ResponseEntity.ok(updated);
-    }
-
-    @PatchMapping("/{id}/written-off")
-    public ResponseEntity<CopyDto> setWrittenOff(@PathVariable UUID id) {
-        CopyDto updated = copyService.setWrittenOff(id);
         return ResponseEntity.ok(updated);
     }
 
@@ -105,12 +81,10 @@ public class CopyController {
         return ResponseEntity.ok(copy);
     }
 
-    @PostMapping("/page")
-    public ResponseEntity<Page<CopyShortDto>> getCopyPage(@Valid @RequestBody GetCopyCriteriaDto criteria) {
-        Page<CopyShortDto> result = copyService.getCopiesPage(criteria);
-        return ResponseEntity.ok(result);
+    @PatchMapping("/{id}/written-off")
+    public ResponseEntity<CopyDto> setWrittenOff(@PathVariable UUID id) {
+        CopyDto updated = copyService.setWrittenOff(id);
+        return ResponseEntity.ok(updated);
     }
-
-
 
 }

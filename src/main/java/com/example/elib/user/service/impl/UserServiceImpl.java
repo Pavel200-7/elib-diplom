@@ -1,7 +1,7 @@
 package com.example.elib.user.service.impl;
 
-import com.example.elib.common.exeption.DuplicateResourceException;
-import com.example.elib.common.exeption.ResourceNotFoundException;
+import com.example.elib.common.exception.DuplicateResourceException;
+import com.example.elib.common.exception.ResourceNotFoundException;
 import com.example.elib.user.service.UserService;
 import com.example.elib.user.dto.request.CreateUserDto;
 import com.example.elib.user.dto.request.UpdateUserDto;
@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -73,5 +74,13 @@ public class UserServiceImpl implements UserService {
         user.activate();
         repository.save(user);
         return mapper.toDto(user);
+    }
+
+    @Override
+    public List<UserDto> searchUsers(String query) {
+        List<User> users = repository.searchByEmailOrPhone(query);
+        return users.stream()
+                .map(mapper::toDto)
+                .toList();
     }
 }

@@ -92,6 +92,8 @@ services:
   postgres:
     image: postgres:17
     container_name: postgres
+    ports:
+      - "9090:5432"
     restart: always
     volumes:
       - postgres-db-vol-5:/var/lib/postgresql/data

@@ -28,30 +28,30 @@ const routes = [
                 component: CallbackView,
                 meta: { public: true }
             },
-            // {
-            //     path: 'search',
-            //     name: 'SearchResults',
-            //     component: () => import('@/views/SearchResultsView.vue'),
-            //     meta: { public: true }
-            // },
-            // {
-            //     path: 'book/:id',
-            //     name: 'BookDetail',
-            //     component: () => import('@/views/BookDetailView.vue'),
-            //     meta: { public: true }
-            // },
-            // {
-            //     path: 'circulation',
-            //     name: 'Circulation',
-            //     component: () => import('@/views/CirculationView.vue'),
-            //     meta: { requiresAuth: true }
-            // },
-            // {
-            //     path: 'reader',
-            //     name: 'Reader',
-            //     component: () => import('@/views/ReaderView.vue'),
-            //     meta: { requiresAuth: true }
-            // }
+            {
+                path: 'search',
+                name: 'SearchResults',
+                component: () => import('@/views/SearchResultsView.vue'),
+                meta: { public: true }
+            },
+            {
+                path: 'book/:id',
+                name: 'BookDetail',
+                component: () => import('@/views/BookDetailView.vue'),
+                meta: { public: true }
+            },
+            {
+                path: 'circulation',
+                name: 'Circulation',
+                component: () => import('@/views/CirculationView.vue'),
+                meta: { requiresAuth: true }
+            },
+            {
+                path: 'reader',
+                name: 'Reader',
+                component: () => import('@/views/ReaderView.vue'),
+                meta: { requiresAuth: true }
+            }
         ]
     },
     {
@@ -61,14 +61,33 @@ const routes = [
         children: [
             {
                 path: '',
-                redirect: '/admin/dictionaries/countries'
+                redirect: '/admin/countries'
             },
             // Простые справочники
             {
-                path: 'dictionaries/:entity',
-                name: 'DictionaryCrud',
-                component: () => import('@/views/admin/dictionaries/DictionaryCrud.vue'),
-                props: true
+                path: 'countries',
+                name: 'Сountries',
+                component: () => import('@/views/admin/dictionaries/Сountries.vue')
+            },
+            {
+                path: 'genres',
+                name: 'Genres',
+                component: () => import('@/views/admin/dictionaries/Genres.vue')
+            },
+            {
+                path: 'languages',
+                name: 'Languages',
+                component: () => import('@/views/admin/dictionaries/Languages.vue')
+            },
+            {
+                path: 'literature-groups',
+                name: 'Literature-groups',
+                component: () => import('@/views/admin/dictionaries/Literature-groups.vue')
+            },
+            {
+                path: 'rooms',
+                name: 'Rooms',
+                component: () => import('@/views/admin/dictionaries/Rooms.vue')
             },
             // Нетиповые справочники
             {

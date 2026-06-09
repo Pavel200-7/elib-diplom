@@ -1,9 +1,9 @@
 package com.example.elib.literaturegroup.service.impl;
 
 import com.example.elib.book.repository.BookRepository;
-import com.example.elib.common.exeption.DuplicateResourceException;
-import com.example.elib.common.exeption.ReferentialIntegrityException;
-import com.example.elib.common.exeption.ResourceNotFoundException;
+import com.example.elib.common.exception.DuplicateResourceException;
+import com.example.elib.common.exception.ReferentialIntegrityException;
+import com.example.elib.common.exception.ResourceNotFoundException;
 import com.example.elib.literaturegroup.dto.request.CreateLiteratureGroupDto;
 import com.example.elib.literaturegroup.dto.request.UpdateLiteratureGroupDto;
 import com.example.elib.literaturegroup.dto.response.LiteratureGroupDto;

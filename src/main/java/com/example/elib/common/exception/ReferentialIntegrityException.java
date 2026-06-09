@@ -1,4 +1,4 @@
-package com.example.elib.common.exeption;
+package com.example.elib.common.exception;
 
 public class ReferentialIntegrityException extends RuntimeException {
     public ReferentialIntegrityException(String message) {

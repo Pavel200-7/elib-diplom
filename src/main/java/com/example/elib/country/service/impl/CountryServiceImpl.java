@@ -1,9 +1,9 @@
 package com.example.elib.country.service.impl;
 
 import com.example.elib.author.repository.AuthorRepository;
-import com.example.elib.common.exeption.DuplicateResourceException;
-import com.example.elib.common.exeption.ReferentialIntegrityException;
-import com.example.elib.common.exeption.ResourceNotFoundException;
+import com.example.elib.common.exception.DuplicateResourceException;
+import com.example.elib.common.exception.ReferentialIntegrityException;
+import com.example.elib.common.exception.ResourceNotFoundException;
 import com.example.elib.country.dto.request.CreateCountryDto;
 import com.example.elib.country.dto.request.UpdateCountryDto;
 import com.example.elib.country.dto.response.CountryDto;

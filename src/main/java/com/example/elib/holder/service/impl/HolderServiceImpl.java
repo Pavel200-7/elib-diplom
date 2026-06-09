@@ -1,8 +1,8 @@
 package com.example.elib.holder.service.impl;
 
-import com.example.elib.common.exeption.DuplicateResourceException;
-import com.example.elib.common.exeption.ReferentialIntegrityException;
-import com.example.elib.common.exeption.ResourceNotFoundException;
+import com.example.elib.common.exception.DuplicateResourceException;
+import com.example.elib.common.exception.ReferentialIntegrityException;
+import com.example.elib.common.exception.ResourceNotFoundException;
 import com.example.elib.copy.repository.CopyRepository;
 import com.example.elib.holder.dto.request.CreateHolderDto;
 import com.example.elib.holder.dto.request.UpdateHolderDto;
