@@ -1,7 +1,7 @@
 <template>
     <div class="dictionary-crud">
         <div class="header">
-            <h2>Страны</h2>
+            <h2>{{ title }}</h2>
             <el-button type="primary" @click="openCreateDialog">
                 <el-icon><Plus /></el-icon>
                 Создать
@@ -10,7 +10,7 @@
 
         <el-table :data="countries" v-loading="loading" stripe>
             <el-table-column 
-                v-for="field in displayFields" 
+                v-for="field in props.displayFields" 
                 :key="field.key" 
                 :prop="field.key" 
                 :label="field.label" 
@@ -103,34 +103,31 @@ const toDelete = ref(null)
 const formRef = ref()
 
 
-const displayFields = [
-    { 
-        key: 'name',          
-        label: 'Название',    
-        type: 'text',          
-        maxLength: 100
-    }
-]
+const emit = defineEmits(['load','create', 'update', 'delete'])
 
-const rules = {
-    name: [                   
-        { required: true, message: 'Введите название', trigger: 'blur' }
-    ]
-}
+defineProps(['title'])
+defineProps(['displayFields'])
+defineProps(['rules'])
+defineProps(['items'])
+defineProps(['loading'])
+defineProps(['error'])
+
+
+const displayFields = props.displayFields
+const rules = props.rules
+
 
 const dialogTitle = computed(() => isEdit.value ? "Редактировать" : "Создать")
 
 const executeOperation = async (operation) => {
-    try {
-        await operation()
-    } catch (error) {
-        ElMessage.error(error.response?.data?.message)
-        console.log(error)
+    emit('load') 
+    if (props.error !== null) {
+        ElMessage.error(props.error)
     }
 }
 
-const loadItems = async () => {   
-    await executeOperation(() => getCountries()) 
+const loadItems = async () => {
+    await executeOperation(() => emit('load')) 
 }
 
 const openCreateDialog = () => {
@@ -183,7 +180,6 @@ const deleteItem = async () => {
     await executeOperation(() => deleteCountry(toDelete.value.id)) 
     await executeOperation(() => loadItems()) 
     deleteDialogVisible.value = false
-
 }
 
 onMounted(() => {

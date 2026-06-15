@@ -17,11 +17,11 @@ let isRefreshing = false
 let failedQueue = []
 
 const processQueue = (error, token = null) => {
-    failedQueue.forEach(prom => {
+    failedQueue.forEach(promise => {
         if (error) {
-            prom.reject(error)
+            promise.reject(error)
         } else {
-            prom.resolve(token)
+            promise.resolve(token)
         }
     })
     failedQueue = []

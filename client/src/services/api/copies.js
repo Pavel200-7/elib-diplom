@@ -1,4 +1,4 @@
-import client from './client'
+import client from '../client/client'
 
 // Получение страницы экземпляров (POST с критериями)
 export const getCopiesPage = (criteria) => {

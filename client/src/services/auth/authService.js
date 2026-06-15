@@ -1,5 +1,5 @@
 import { tokenManager } from './tokenManager'
-import apiClient from '@/services/api/client'
+import apiClient from '@/services/client/client'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 const AUTH_URL = `${API_BASE_URL}/api/v1/auth/authorize`

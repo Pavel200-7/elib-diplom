@@ -1,4 +1,4 @@
-import client from './client'
+import client from '../client/client'
 
 export const searchUsers = (query) => {
     return client.get('/api/v1/users/search', { params: { query } })

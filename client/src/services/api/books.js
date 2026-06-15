@@ -1,4 +1,4 @@
-import client from './client'
+import client from '../client/client'
 
 export const getAll = (criteria) => {
     return client.post('/api/v1/books/page', criteria)
