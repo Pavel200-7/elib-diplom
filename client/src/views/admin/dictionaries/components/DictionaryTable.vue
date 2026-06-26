@@ -8,9 +8,9 @@
             </el-button>
         </div>
 
-        <el-table :data="countries" v-loading="loading" stripe>
+        <el-table :data="items" v-loading="loading" stripe>
             <el-table-column 
-                v-for="field in props.displayFields" 
+                v-for="field in displayFields" 
                 :key="field.key" 
                 :prop="field.key" 
                 :label="field.label" 
@@ -81,19 +81,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { ElMessage } from 'element-plus'
 import { Plus, Edit, Delete } from '@element-plus/icons-vue'
-import { useCountry } from '@/services/composables/useCountry.js'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
-const {
-  countries,
-  loading,
-  getCountries,
-  createCountry,
-  updateCountry,
-  deleteCountry
-} = useCountry()
 
 const dialogVisible = ref(false)
 const deleteDialogVisible = ref(false)
@@ -104,30 +94,14 @@ const formRef = ref()
 
 
 const emit = defineEmits(['load','create', 'update', 'delete'])
-
-defineProps(['title'])
-defineProps(['displayFields'])
-defineProps(['rules'])
-defineProps(['items'])
-defineProps(['loading'])
-defineProps(['error'])
-
-
-const displayFields = props.displayFields
-const rules = props.rules
+const props = defineProps(['title', 'displayFields', 'rules', 'items', 'loading'])
 
 
 const dialogTitle = computed(() => isEdit.value ? "Редактировать" : "Создать")
 
-const executeOperation = async (operation) => {
-    emit('load') 
-    if (props.error !== null) {
-        ElMessage.error(props.error)
-    }
-}
 
 const loadItems = async () => {
-    await executeOperation(() => emit('load')) 
+    emit('load')
 }
 
 const openCreateDialog = () => {
@@ -149,11 +123,9 @@ const save = async () => {
 
     const data = { ...form.value }
     if (isEdit.value) {
-        await executeOperation(() => updateCountry(data.id, data)) 
-        ElMessage.success('Обновлено')
+        emit('update', data.id, data)
     } else {
-        await executeOperation(() => createCountry(data)) 
-        ElMessage.success('Создано')
+        emit('create', data)
     }
     
     dialogVisible.value = false
@@ -177,13 +149,13 @@ const confirmDelete = (row) => {
 }
 
 const deleteItem = async () => {
-    await executeOperation(() => deleteCountry(toDelete.value.id)) 
-    await executeOperation(() => loadItems()) 
+    emit('delete', toDelete.value.id)
+    await loadItems()
     deleteDialogVisible.value = false
 }
 
-onMounted(() => {
-    loadItems()
+onMounted(async () => {
+    await loadItems()
 })
 </script>
 

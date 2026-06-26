@@ -1,9 +1,10 @@
 import { ref } from 'vue'
-import * as api from '../api/countries'
+import * as api from '../api/genres'
 
-export function useCountry() {
-    const country = ref(null)
-    const countries = ref([])
+export function useGenre() {
+
+    const genre = ref(null)
+    const genres = ref([])
 
     const loading = ref(false)
     const error = ref(null)
@@ -13,7 +14,7 @@ export function useCountry() {
         error.value = null
         try {
             const response = await request()
-            return response.data;
+            return response.data
         } catch (err) {
             error.value = err.response?.data?.message || err.message
             throw err
@@ -22,64 +23,64 @@ export function useCountry() {
         }
     }
 
-    const getCountries = async () => {
+    const getGenres = async () => {
         const responseData = await handleRequest(() => api.getAll())
-        countries.value = responseData
+        genres.value = responseData
         return responseData
     }
 
-    const getCountry = async (id) => {
+    const getGenre = async (id) => {
         const responseData = await handleRequest(() => api.getById(id))
+        genre.value = responseData
         addNewOrUpdate(id, responseData)
         return responseData
     }
 
-    const createCountry = async (data) => {
+    const createGenre = async (data) => {
         const responseData = await handleRequest(() => api.create(data))
-        country.value = responseData
+        genre.value = responseData
         addNewOrUpdate(responseData.id, responseData)
         return responseData
     }
 
-    const updateCountry = async (id, data) => {
+    const updateGenre = async (id, data) => {
         const responseData = await handleRequest(() => api.update(id, data))
-        country.value = responseData
+        genre.value = responseData
         addNewOrUpdate(id, responseData)
         return responseData
     }
 
     const addNewOrUpdate = (id, data) => {
-        const index = countries.value.findIndex((country) => country.id === id)
+        const index = genres.value.findIndex((genre) => genre.id === id)
         if (index !== -1) {
-            const newCountries = [...countries.value]
-            newCountries[index] = data
-            countries.value = newCountries
+            const newGenres = [...genres.value]
+            newGenres[index] = data
+            genres.value = newGenres
         } else {
-            countries.value = [...countries.value, data]
+            genres.value = [...genres.value, data]    
         }
     }
 
-    const deleteCountry = async (id) => {
+    const deleteGenre = async (id) => {
         await handleRequest(() => api.deleteItem(id))
-        countries.value = countries.value.filter((country) => country.id !== id)
-        if (country.value?.id === id) {
-            country.value = null
+        genres.value = genres.value.filter((genre) => genre.id !== id)
+        if (genre.value?.id === id) {
+            genre.value = null
         }
     }
-
 
     return {
         // state
-        country,
-        countries,
+        genre,
+        genres,
         loading,
         error,
 
         //methods
-        getCountries,
-        getCountry,
-        createCountry,
-        updateCountry,
-        deleteCountry
+        getGenres,
+        getGenre,
+        createGenre,
+        updateGenre,
+        deleteGenre
     }
 }

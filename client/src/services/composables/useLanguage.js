@@ -1,9 +1,9 @@
 import { ref } from 'vue'
-import * as api from '../api/countries'
+import * as api from '../api/languages'
 
-export function useCountry() {
-    const country = ref(null)
-    const countries = ref([])
+export function useLanguage() {
+    const language = ref(null)
+    const languages = ref([])
 
     const loading = ref(false)
     const error = ref(null)
@@ -22,64 +22,64 @@ export function useCountry() {
         }
     }
 
-    const getCountries = async () => {
+    const getLanguages = async () => {
         const responseData = await handleRequest(() => api.getAll())
-        countries.value = responseData
+        languages.value = responseData
         return responseData
     }
 
-    const getCountry = async (id) => {
+    const getLanguage = async (id) => {
         const responseData = await handleRequest(() => api.getById(id))
         addNewOrUpdate(id, responseData)
         return responseData
     }
 
-    const createCountry = async (data) => {
+    const createLanguage = async (data) => {
         const responseData = await handleRequest(() => api.create(data))
-        country.value = responseData
+        language.value = responseData
         addNewOrUpdate(responseData.id, responseData)
         return responseData
     }
 
-    const updateCountry = async (id, data) => {
+    const updateLanguage = async (id, data) => {
         const responseData = await handleRequest(() => api.update(id, data))
-        country.value = responseData
+        language.value = responseData
         addNewOrUpdate(id, responseData)
         return responseData
     }
 
     const addNewOrUpdate = (id, data) => {
-        const index = countries.value.findIndex((country) => country.id === id)
+        const index = languages.value.findIndex((language) => language.id === id)
         if (index !== -1) {
-            const newCountries = [...countries.value]
-            newCountries[index] = data
-            countries.value = newCountries
+            const newLanguages = [...languages.value]
+            newLanguages[index] = data
+            languages.value = newLanguages
         } else {
-            countries.value = [...countries.value, data]
+            languages.value = [...languages.value, data]
         }
     }
 
-    const deleteCountry = async (id) => {
+    const deleteLanguage = async (id) => {
         await handleRequest(() => api.deleteItem(id))
-        countries.value = countries.value.filter((country) => country.id !== id)
-        if (country.value?.id === id) {
-            country.value = null
+        languages.value = languages.value.filter((language) => language.id !== id)
+        if (language.value?.id === id) {
+            language.value = null
         }
     }
 
 
     return {
         // state
-        country,
-        countries,
+        language,
+        languages,
         loading,
         error,
 
         //methods
-        getCountries,
-        getCountry,
-        createCountry,
-        updateCountry,
-        deleteCountry
+        getLanguages,
+        getLanguage,
+        createLanguage,
+        updateLanguage,
+        deleteLanguage
     }
 }
