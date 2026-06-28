@@ -12,7 +12,7 @@
             <el-table-column 
                 v-for="field in displayFields" 
                 :key="field.key" 
-                :prop="field.key" 
+                :prop="field.value" 
                 :label="field.label" 
                 :min-width="150"
             />
@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { Plus, Edit, Delete } from '@element-plus/icons-vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
@@ -156,6 +156,10 @@ const deleteItem = async () => {
 
 onMounted(async () => {
     await loadItems()
+})
+
+watch(() => props.items, (newItems) => {
+    console.log(newItems)
 })
 </script>
 

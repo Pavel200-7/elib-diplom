@@ -27,7 +27,8 @@ const {
 
 const displayFields = [
     { 
-        key: 'name',          
+        key: 'name',
+        value: 'name',          
         label: 'Название',    
         type: 'text',          
         maxLength: 100

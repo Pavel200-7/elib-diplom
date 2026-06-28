@@ -30,6 +30,7 @@ export function useLiteratureGroup() {
 
     const getLiteratureGroup = async (id) => {
         const responseData = await handleRequest(() => api.getById(id))
+        literatureGroup.value = responseData
         addNewOrUpdate(id, responseData)
         return responseData
     }
@@ -66,7 +67,6 @@ export function useLiteratureGroup() {
             literatureGroup.value = null
         }
     }
-
 
     return {
         // state

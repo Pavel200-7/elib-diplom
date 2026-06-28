@@ -19,8 +19,6 @@ app.use(pinia)
 app.use(router)
 app.use(ElementPlus)
 
-app.mount('#app')
-
 app.config.errorHandler = (err, vm, info) => {
     const message = err.response?.data?.message 
         || err.message 
@@ -31,3 +29,7 @@ app.config.errorHandler = (err, vm, info) => {
     console.error(err, info)
     console.log(message)
 }
+
+
+app.mount('#app')
+
