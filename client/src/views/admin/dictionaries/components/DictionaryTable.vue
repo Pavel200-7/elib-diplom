@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Plus, Edit, Delete } from '@element-plus/icons-vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
@@ -156,10 +156,6 @@ const deleteItem = async () => {
 
 onMounted(async () => {
     await loadItems()
-})
-
-watch(() => props.items, (newItems) => {
-    console.log(newItems)
 })
 </script>
 

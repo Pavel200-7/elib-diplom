@@ -93,17 +93,17 @@ const routes = [
             {
                 path: 'authors',
                 name: 'AdminAuthors',
-                component: () => import('@/views/admin/authors/AuthorsList.vue')
+                component: () => import('@/views/admin/dictionaries/AuthorsList.vue')
             },
             {
                 path: 'publishings',
                 name: 'AdminPublishings',
-                component: () => import('@/views/admin/publishings/PublishingsList.vue')
+                component: () => import('@/views/admin/dictionaries/PublishingsList.vue')
             },
             {
                 path: 'holders',
                 name: 'AdminHolders',
-                component: () => import('@/views/admin/holders/HoldersList.vue')
+                component: () => import('@/views/admin/dictionaries/HoldersList.vue')
             },
             // Управление
             {
