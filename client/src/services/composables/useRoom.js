@@ -51,9 +51,9 @@ export function useRoom() {
     const addNewOrUpdate = (id, data) => {
         const index = rooms.value.findIndex((room) => room.id === id)
         if (index !== -1) {
-            const newLanguages = [...rooms.value]
-            newLanguages[index] = data
-            rooms.value = newLanguages
+            const newItems = [...rooms.value]
+            newItems[index] = data
+            rooms.value = newItems
         } else {
             rooms.value = [...rooms.value, data]
         }

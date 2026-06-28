@@ -17,5 +17,6 @@ public class HolderDto {
     UUID id;
     String name;
     UUID roomId;
+    String roomName;
     HolderType type;
 }

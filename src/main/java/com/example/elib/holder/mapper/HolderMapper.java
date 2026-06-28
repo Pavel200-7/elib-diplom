@@ -12,5 +12,6 @@ import org.mapstruct.MappingConstants;
 public interface HolderMapper {
 
     @Mapping(source = "room.id", target = "roomId")
+    @Mapping(source = "room.name", target = "roomName")
     HolderDto toDto(Holder holder);
 }

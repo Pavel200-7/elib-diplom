@@ -52,9 +52,9 @@ export function useLiteratureGroup() {
     const addNewOrUpdate = (id, data) => {
         const index = literatureGroups.value.findIndex((literatureGroup) => literatureGroup.id === id)
         if (index !== -1) {
-            const newLanguages = [...literatureGroups.value]
-            newLanguages[index] = data
-            literatureGroups.value = newLanguages
+            const newItems = [...literatureGroups.value]
+            newItems[index] = data
+            literatureGroups.value = newItems
         } else {
             literatureGroups.value = [...literatureGroups.value, data]
         }

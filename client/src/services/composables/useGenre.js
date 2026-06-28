@@ -53,9 +53,9 @@ export function useGenre() {
     const addNewOrUpdate = (id, data) => {
         const index = genres.value.findIndex((genre) => genre.id === id)
         if (index !== -1) {
-            const newGenres = [...genres.value]
-            newGenres[index] = data
-            genres.value = newGenres
+            const newItems = [...genres.value]
+            newItems[index] = data
+            genres.value = newItems
         } else {
             genres.value = [...genres.value, data]    
         }

@@ -10,7 +10,6 @@
         @update="(id, data) => updatePublishing(id, data)"
         @delete="(id) => deletePublishing(id)"
     />
-
 </template>
 
 <script setup>
@@ -34,12 +33,7 @@ const {
   getCountries
 } = useCountry()
 
-const countriesList = computed(() => {
-    return countries.value.map(item => ({
-        value: item.id,
-        label: item.name
-    }))
-})
+
 
 const displayFields = computed(() => [
         { 
@@ -64,6 +58,13 @@ const displayFields = computed(() => [
             options: countriesList.value
         }
 ]) 
+
+const countriesList = computed(() => {
+    return countries.value.map(item => ({
+        value: item.id,
+        label: item.name
+    }))
+})
 
 const rules = {
     name: [{ required: true, message: 'Введите название издательства', trigger: 'blur' }],

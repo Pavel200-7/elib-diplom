@@ -51,9 +51,9 @@ export function usePublishing() {
     const addNewOrUpdate = (id, data) => {
         const index = publishings.value.findIndex((publishing) => publishing.id === id)
         if (index !== -1) {
-            const newPublishings = [...publishings.value]
-            newPublishings[index] = data
-            publishings.value = newPublishings
+            const newItems = [...publishings.value]
+            newItems[index] = data
+            publishings.value = newItems
         } else {
             publishings.value = [...publishings.value, data]
         }

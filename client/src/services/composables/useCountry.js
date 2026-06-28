@@ -51,9 +51,9 @@ export function useCountry() {
     const addNewOrUpdate = (id, data) => {
         const index = countries.value.findIndex((country) => country.id === id)
         if (index !== -1) {
-            const newCountries = [...countries.value]
-            newCountries[index] = data
-            countries.value = newCountries
+            const newItems = [...countries.value]
+            newItems[index] = data
+            countries.value = newItems
         } else {
             countries.value = [...countries.value, data]
         }

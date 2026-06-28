@@ -51,9 +51,9 @@ export function useLanguage() {
     const addNewOrUpdate = (id, data) => {
         const index = languages.value.findIndex((language) => language.id === id)
         if (index !== -1) {
-            const newLanguages = [...languages.value]
-            newLanguages[index] = data
-            languages.value = newLanguages
+            const newItems = [...languages.value]
+            newItems[index] = data
+            languages.value = newItems
         } else {
             languages.value = [...languages.value, data]
         }

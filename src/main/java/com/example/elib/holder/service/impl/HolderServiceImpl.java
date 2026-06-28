@@ -75,7 +75,7 @@ public class HolderServiceImpl implements HolderService {
     @Override
     @Transactional(readOnly = true)
     public List<HolderDto> getAllHolders() {
-        return holderRepository.findAll().stream()
+        return holderRepository.getAllWithRoom().stream()
                 .map(holderMapper::toDto)
                 .toList();
     }
