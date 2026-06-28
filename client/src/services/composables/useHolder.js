@@ -93,7 +93,6 @@ export function useHolder() {
         { value: 'LOCKER', label: 'Сейф' }
     ];
 
-
     return {
         // state
         holder,

@@ -67,7 +67,6 @@ export function useRoom() {
         }
     }
 
-
     return {
         // state
         room,

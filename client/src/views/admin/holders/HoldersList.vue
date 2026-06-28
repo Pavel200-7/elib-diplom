@@ -16,7 +16,6 @@
 import DictionaryTable from '@/views/admin/dictionaries/components/DictionaryTable.vue'
 import { useHolder } from '@/services/composables/useHolder'
 import { useRoom } from '@/services/composables/useRoom'
-import { useCountry } from '@/services/composables/useCountry'
 import { onMounted, computed } from 'vue'
 
 const {
@@ -33,8 +32,6 @@ const {
   rooms,
   getRooms,
 } = useRoom()
-
-
 
 const displayFields = computed(() => [
         { 
@@ -60,7 +57,6 @@ const displayFields = computed(() => [
         }
 ]) 
 
-
 const roomsList = computed(() => {
     return rooms.value.map(item => ({
         value: item.id,
@@ -73,7 +69,6 @@ const rules = {
     roomId: [{ required: true, message: 'Выберите помещение', trigger: 'change' }],
     type: [{ required: true, message: 'Выберите тип', trigger: 'change' }]
 }
-
 
 onMounted(async () => {
     await getRooms()

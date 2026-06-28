@@ -18,7 +18,6 @@ import { usePublishing } from '@/services/composables/usePublishing'
 import { useCountry } from '@/services/composables/useCountry'
 import { onMounted, computed } from 'vue'
 
-
 const {
   publishings,
   loading,
@@ -32,8 +31,6 @@ const {
   countries,
   getCountries
 } = useCountry()
-
-
 
 const displayFields = computed(() => [
         { 

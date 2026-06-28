@@ -1,9 +1,9 @@
 import { ref } from 'vue'
-import * as api from '../api/languages'
+import * as api from '../api/authors'
 
-export function useLanguage() {
-    const language = ref(null)
-    const languages = ref([])
+export function useAuthor() {
+    const author = ref(null)
+    const authors = ref([])
 
     const loading = ref(false)
     const error = ref(null)
@@ -22,63 +22,63 @@ export function useLanguage() {
         }
     }
 
-    const getLanguages = async () => {
+    const getAuthors = async () => {
         const responseData = await handleRequest(() => api.getAll())
-        languages.value = responseData
+        authors.value = responseData
         return responseData
     }
 
-    const getLanguage = async (id) => {
+    const getAuthor = async (id) => {
         const responseData = await handleRequest(() => api.getById(id))
         addNewOrUpdate(id, responseData)
         return responseData
     }
 
-    const createLanguage = async (data) => {
+    const createAuthor = async (data) => {
         const responseData = await handleRequest(() => api.create(data))
-        language.value = responseData
+        author.value = responseData
         addNewOrUpdate(responseData.id, responseData)
         return responseData
     }
 
-    const updateLanguage = async (id, data) => {
+    const updateAuthor = async (id, data) => {
         const responseData = await handleRequest(() => api.update(id, data))
-        language.value = responseData
+        author.value = responseData
         addNewOrUpdate(id, responseData)
         return responseData
     }
 
     const addNewOrUpdate = (id, data) => {
-        const index = languages.value.findIndex((language) => language.id === id)
+        const index = authors.value.findIndex((author) => author.id === id)
         if (index !== -1) {
-            const newItems = [...languages.value]
+            const newItems = [...authors.value]
             newItems[index] = data
-            languages.value = newItems
+            authors.value = newItems
         } else {
-            languages.value = [...languages.value, data]
+            authors.value = [...authors.value, data]
         }
     }
 
-    const deleteLanguage = async (id) => {
+    const deleteAuthor = async (id) => {
         await handleRequest(() => api.deleteItem(id))
-        languages.value = languages.value.filter((language) => language.id !== id)
-        if (language.value?.id === id) {
-            language.value = null
+        authors.value = authors.value.filter((author) => author.id !== id)
+        if (author.value?.id === id) {
+            author.value = null
         }
     }
 
     return {
         // state
-        language,
-        languages,
+        author,
+        authors,
         loading,
         error,
 
         //methods
-        getLanguages,
-        getLanguage,
-        createLanguage,
-        updateLanguage,
-        deleteLanguage
+        getAuthors,
+        getAuthor,
+        createAuthor,
+        updateAuthor,
+        deleteAuthor
     }
 }

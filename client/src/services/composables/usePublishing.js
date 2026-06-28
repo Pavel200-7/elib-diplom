@@ -67,7 +67,6 @@ export function usePublishing() {
         }
     }
 
-
     return {
         // state
         publishing,
