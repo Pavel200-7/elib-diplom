@@ -6,5 +6,4 @@ import org.springframework.data.jpa.domain.Specification;
 
 public interface CopySpecificationBuilder {
     Specification<Copy> fromCriteria(CopySearchCriteria criteria);
-
 }

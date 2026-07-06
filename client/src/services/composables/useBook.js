@@ -40,28 +40,15 @@ export function useBook() {
         return responseData
     }
 
-    // const getNextPage = async () => {
-    //     const lastShown = (page + 1) * size
-    //     if (lastShown < total) {
-    //         page.value++
-    //     }
-    //     return getBooks()
-    // }
-
-    // const getGetPrevious = async () => {
-    //     if (page.value !== 0) {
-    //         page.value--
-    //     }
-    //     return getBooks()
-    // }
-
     const getBook = async (id) => {
         const responseData = await handleRequest(() => api.getById(id))
+        book.value = responseData
         addNewOrUpdate(id, responseData)
         return responseData
     }
 
     const createBook = async (data) => {
+        console.log(data)
         const responseData = await handleRequest(() => api.create(data))
         book.value = responseData
         addNewOrUpdate(responseData.id, responseData)

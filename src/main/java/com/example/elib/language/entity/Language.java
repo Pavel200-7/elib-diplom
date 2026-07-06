@@ -1,6 +1,6 @@
 package com.example.elib.language.entity;
 
-import com.example.elib.common.entity.BaseEntity;
+import com.example.elib.common.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

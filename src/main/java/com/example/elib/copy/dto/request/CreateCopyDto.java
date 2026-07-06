@@ -14,10 +14,6 @@ import java.util.UUID;
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class CreateCopyDto {
-
-    @NotBlank
-    private String inventoryNumber;
-
     @NotBlank
     private String isbn;
     private UUID bookId;

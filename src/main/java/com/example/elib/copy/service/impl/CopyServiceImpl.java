@@ -5,6 +5,7 @@ import com.example.elib.book.repository.BookRepository;
 import com.example.elib.common.dto.pagination.PageData;
 import com.example.elib.common.exception.DuplicateResourceException;
 import com.example.elib.common.exception.ResourceNotFoundException;
+import com.example.elib.common.service.InventoryNumberGenerator;
 import com.example.elib.copy.dto.request.CreateCopyDto;
 import com.example.elib.copy.dto.request.GetCopyCriteriaDto;
 import com.example.elib.copy.dto.request.SetRegularHolderDto;
@@ -46,23 +47,25 @@ public class CopyServiceImpl implements CopyService {
     private final CopyRepository copyRepository;
     private final BookRepository bookRepository;
     private final HolderRepository holderRepository;
+
     private final CopyMapper copyMapper;
     private final CopyStateMachineConfig stateMachineConfig;
     private final CopySpecificationBuilder specBuilder;
 
+    private final InventoryNumberGenerator numberGenerator;
+
     @Override
     @Transactional
     public CopyDto createCopy(CreateCopyDto dto) {
-        if (copyRepository.existsByInventoryNumber(dto.getInventoryNumber())) {
-            throw new DuplicateResourceException("Экземпляр с инвентарным номером '" + dto.getInventoryNumber() + "' уже существует.");
-        }
         if (copyRepository.existsByIsbn(dto.getIsbn())) {
             throw new DuplicateResourceException("Экземпляр с isbn '" + dto.getIsbn() + "' уже существует.");
         }
         Book book = bookRepository.findById(dto.getBookId())
                 .orElseThrow(() -> new ResourceNotFoundException("Книга с id " + dto.getBookId() + " не найдена."));
 
-        Copy copy = Copy.addCopy(dto.getInventoryNumber(), dto.getIsbn(), book);
+        Copy copy = Copy.addCopy(numberGenerator.generate(),
+                dto.getIsbn(),
+                book);
         copyRepository.save(copy);
         return copyMapper.toDto(copy);
     }

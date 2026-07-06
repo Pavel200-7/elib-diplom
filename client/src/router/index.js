@@ -93,28 +93,29 @@ const routes = [
             {
                 path: 'authors',
                 name: 'AdminAuthors',
-                component: () => import('@/views/admin/dictionaries/AuthorsList.vue')
+                component: () => import('@/views/admin/dictionaries/Authors.vue')
             },
             {
                 path: 'publishings',
                 name: 'AdminPublishings',
-                component: () => import('@/views/admin/dictionaries/PublishingsList.vue')
+                component: () => import('@/views/admin/dictionaries/Publishings.vue')
             },
             {
                 path: 'holders',
                 name: 'AdminHolders',
-                component: () => import('@/views/admin/dictionaries/HoldersList.vue')
+                component: () => import('@/views/admin/dictionaries/Holders.vue')
             },
             // Управление
             {
                 path: 'books',
                 name: 'AdminBooks',
-                component: () => import('@/views/admin/books/BooksList.vue')
+                component: () => import('@/views/admin/books/Books.vue')
             },
             {
-                path: 'copies',
+                path: 'copies/:id?', 
                 name: 'AdminCopies',
-                component: () => import('@/views/admin/copies/CopiesList.vue')
+                component: () => import('@/views/admin/copies/Copies.vue'),
+                props: true 
             }
         ]
     }

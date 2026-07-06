@@ -1,14 +1,13 @@
 package com.example.elib.copy.entity;
 
 import com.example.elib.book.entity.Book;
-import com.example.elib.common.entity.BaseEntity;
+import com.example.elib.common.entity.base.BaseEntity;
 import com.example.elib.copy.enums.CopyStatus;
 import com.example.elib.holder.entity.Holder;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.UUID;
 
@@ -26,7 +25,7 @@ public class Copy extends BaseEntity {
     @JoinColumn(name = "holder_id")
     private Holder holder;
 
-    @Column(name = "inventory_number", nullable = false, unique = true, length = 50)
+    @Column(name = "inventory_number", nullable = false, unique = true, length = 12)
     private String inventoryNumber;
 
     @Column(name = "isbn", length = 20)
@@ -101,10 +100,9 @@ public class Copy extends BaseEntity {
             String cleanIsbn = isbn.replaceAll("[\\s\\-]", "");
             if (!cleanIsbn.matches("^(97[89])?\\d{9}[\\dX]$")) {
                 throw new IllegalArgumentException(
-                        "Неверный формат ISBN. Допустимые форматы: ISBN-10 (XXXXXXXXXX) или ISBN-13 (XXXXXXXXXXXXX)"
+                        "Неверный формат ISBN. Допустимые форматы: ISBN-10 (XXXXXXXXXX) или ISBN-13 (978XXXXXXXXXX, 979XXXXXXXXXX)"
                 );
             }
         }
     }
-
 }

@@ -1,10 +1,6 @@
 <template>
     <div class="books-list">
-        <BookHeader 
-            title="Книги"
-            add-button-text="Добавить книгу"
-            @add="openCreateDialog"
-        />
+        <BookHeader @add="openCreateDialog"/>
 
         <BookFilter 
             :authors="authors"
@@ -15,7 +11,13 @@
         />
 
         <el-table :data="books" v-loading="loading" stripe>
-            <el-table-column prop="name" label="Название" min-width="250" />
+            <el-table-column prop="name" label="Название" min-width="250" >
+                <template #default="{ row }">
+                    <router-link :to="`/admin/copies/${row.id}`" class="book-link">
+                        {{ row.name }}
+                    </router-link>
+                </template>    
+            </el-table-column>
             <el-table-column prop="authorName" label="Автор" width="200" />
             <el-table-column prop="genreName" label="Жанр" width="150" />
             <el-table-column prop="publicationYear" label="Год" width="80" />
@@ -177,5 +179,14 @@ onMounted(() => {
 <style scoped>
 .books-list {
     padding: 24px;
+}
+
+.book-link {
+    color: #409eff;
+    text-decoration: none;
+}
+
+.book-link:hover {
+    text-decoration: underline;
 }
 </style>

@@ -2,7 +2,7 @@ package com.example.elib.book.entity;
 
 import com.example.elib.author.entity.Author;
 import com.example.elib.book.enums.AgeRestrictions;
-import com.example.elib.common.entity.BaseEntity;
+import com.example.elib.common.entity.base.BaseEntity;
 import com.example.elib.genre.entity.Genre;
 import com.example.elib.language.entity.Language;
 import com.example.elib.literaturegroup.entity.LiteratureGroup;
@@ -11,7 +11,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.Year;
 import java.util.UUID;

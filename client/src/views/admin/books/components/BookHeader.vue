@@ -1,34 +1,18 @@
 <template>
     <div class="page-header">
-        <h2>{{ title }}</h2>
+        <h2>Книги</h2>
         <el-button 
-            v-if="showAddButton"
             type="primary" 
             @click="handleAdd"
         >
-            <el-icon><Plus /></el-icon>
-            {{ addButtonText }}
+        <el-icon><Plus /></el-icon>
+            Добавить книгу
         </el-button>
     </div>
 </template>
 
 <script setup>
 import { Plus } from '@element-plus/icons-vue'
-
-defineProps({
-    title: {
-        type: String,
-        required: true
-    },
-    addButtonText: {
-        type: String,
-        default: 'Добавить'
-    },
-    showAddButton: {
-        type: Boolean,
-        default: true
-    }
-})
 
 const emit = defineEmits(['add'])
 

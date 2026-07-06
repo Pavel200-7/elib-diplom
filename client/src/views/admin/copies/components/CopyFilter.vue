@@ -1,9 +1,9 @@
 <template>
     <div class="filter">
         <el-input
-            v-model="filter.name"
-            placeholder="Поиск по названию"
-            style="width: 250px"
+            v-model="filter.inventoryNumber"
+            placeholder="Инв. номер"
+            style="width: 150px"
             clearable
             @clear="loadItems"
             @keyup.enter="loadItems"
@@ -14,12 +14,12 @@
                 </el-button>
             </template>
         </el-input>
-        <el-select v-model="filter.authorId" placeholder="Автор" clearable filterable style="width: 200px">
-            <el-option v-for="a in authors" :key="a.id" :label="a.name" :value="a.id" />
+        <el-select v-model="filter.status" placeholder="Статус" clearable style="width: 150px">
+            <el-option v-for="s in statuses" :key="s.value" :label="s.label" :value="s.value" />
         </el-select>
-        <el-select v-model="filter.genreId" placeholder="Жанр" clearable style="width: 150px">
-            <el-option v-for="g in genres" :key="g.id" :label="g.name" :value="g.id" />
-        </el-select>
+            <el-select v-model="filter.holderId" placeholder="Хранилище" clearable style="width: 150px">
+                <el-option v-for="s in holders" :key="s.id" :label="s.name" :value="s.id" />
+            </el-select>
         <el-button type="primary" @click="loadItems">Применить</el-button>
         <el-button @click="resetFilters">Сбросить</el-button>
     </div>
@@ -30,18 +30,22 @@ import { Search } from '@element-plus/icons-vue'
 import { reactive } from 'vue'
 
 const emit = defineEmits(['load', 'setFilter', 'resetFilter'])
-const props = defineProps(['authors', 'genres'])
+const props = defineProps(['bookId', 'holders', 'statuses'])
 
 const filter = reactive({
-    name: '',
-    authorId: null,
-    genreId: null
+    inventoryNumber: null,
+    isbn: null,
+    holderId: null,
+    bookId: props.bookId || null,
+    status: null
 })
 
 const resetFilters = () => {
-    filter.name = ''
-    filter.authorId = null
-    filter.genreId = null
+    filter.inventoryNumber = null
+    filter.isbn = null
+    filter.holderId = null
+    filter.bookId = null
+    filter.status = null
     resetFilter()
     loadItems()
 }
@@ -59,7 +63,6 @@ const resetFilter = async () => {
     emit('resetFilter')
 }
 </script>
-
 
 <style scoped>
 .filter {

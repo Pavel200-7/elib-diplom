@@ -25,7 +25,6 @@ export function useHolder() {
     const getHolders = async () => {
         const responseData = await handleRequest(() => api.getAll())
         holders.value = responseData.map(item => buildModel(item))
-        console.log(holders.value)
         return responseData
     }
 

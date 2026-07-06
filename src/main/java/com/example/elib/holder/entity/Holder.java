@@ -1,6 +1,6 @@
 package com.example.elib.holder.entity;
 
-import com.example.elib.common.entity.BaseEntity;
+import com.example.elib.common.entity.base.BaseEntity;
 import com.example.elib.holder.enums.HolderType;
 import com.example.elib.room.entity.Room;
 import jakarta.persistence.*;

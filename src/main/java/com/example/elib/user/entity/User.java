@@ -1,6 +1,6 @@
 package com.example.elib.user.entity;
 
-import com.example.elib.common.entity.BaseEntity;
+import com.example.elib.common.entity.base.BaseEntity;
 import com.example.elib.user.enums.UserStatus;
 import com.example.elib.user.vo.Contact;
 import com.example.elib.user.vo.PersonalData;

@@ -11,18 +11,22 @@ const props = defineProps({
     status: {
         type: String,
         required: true
+    },
+    statuses: {
+        type: Array,
+        required: true
     }
 })
 
 const statusMap = {
-    ADDED: { label: 'Добавлен', type: 'info' },
-    AVAILABLE: { label: 'Доступен', type: 'success' },
-    IN_TRANSIT: { label: 'В обработке', type: 'warning' },
-    RESERVED: { label: 'Забронирован', type: 'primary' },
-    ISSUED: { label: 'Выдан', type: 'danger' },
-    WRITTEN_OFF: { label: 'Списан', type: 'info' }
+    ADDED: { type: 'info' },
+    AVAILABLE: { type: 'success' },
+    IN_TRANSIT: { type: 'warning' },
+    RESERVED: { type: 'primary' },
+    ISSUED: { type: 'danger' },
+    WRITTEN_OFF: { type: 'info' }
 }
 
-const label = computed(() => statusMap[props.status]?.label || props.status)
+const label = computed(() => props.statuses.find(s => s.value == props.status).label || '')
 const tagType = computed(() => statusMap[props.status]?.type || 'info')
 </script>

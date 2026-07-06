@@ -86,5 +86,4 @@ public class CopyController {
         CopyDto updated = copyService.setWrittenOff(id);
         return ResponseEntity.ok(updated);
     }
-
 }
