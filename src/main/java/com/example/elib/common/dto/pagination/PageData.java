@@ -4,16 +4,18 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 
+/**
+ * Номер страницы и количество позиций на одной странице
+ */
 @Value
 @Builder
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
-@AllArgsConstructor
 public class PageData {
 
     @Min(0)
-    private Integer page;
+    private Integer page = 0;
 
     @Min(0)
     @Max(100)
-    private Integer size;
+    private Integer size = 20;
 }

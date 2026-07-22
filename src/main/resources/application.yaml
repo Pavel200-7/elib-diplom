@@ -8,13 +8,22 @@ spring:
     password: ${DB_PASSWORD:password}
   jpa:
     hibernate:
-      ddl-auto: update
-
+      ddl-auto: validate
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost/auth/realms/oAuth}
+
+flyway:
+  schemas: public
+  target: latest
+  validateOnMigrate: true
+  installedBy: Pavel200-7
+  locations: classpath:db/migration
+  baseline-on-migrate: true
+
+
 
 app:
   keycloak:

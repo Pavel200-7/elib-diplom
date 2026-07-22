@@ -4,6 +4,9 @@ import com.example.elib.copy.enums.CopySortField;
 import lombok.*;
 import org.springframework.data.domain.Sort;
 
+/**
+ * Критерии сортировки экземпляров книги
+ */
 @Value
 @Builder
 @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)

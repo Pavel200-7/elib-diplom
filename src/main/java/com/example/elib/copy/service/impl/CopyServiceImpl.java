@@ -21,6 +21,7 @@ import com.example.elib.copy.mapper.CopyMapper;
 import com.example.elib.copy.repository.CopyRepository;
 import com.example.elib.copy.repository.spec.CopySpecificationBuilder;
 import com.example.elib.copy.service.CopyService;
+import com.example.elib.copy.service.impl.utils.CopyPageRequestUtils;
 import com.example.elib.copy.sm.CopyStateMachineConfig;
 import com.example.elib.holder.entity.Holder;
 import com.example.elib.holder.repository.HolderRepository;
@@ -33,6 +34,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.elib.copy.enums.CopySortField;
 
 import java.util.List;
 import java.util.UUID;
@@ -134,54 +136,52 @@ public class CopyServiceImpl implements CopyService {
             throw new IllegalStateException("Нельзя сделать доступным экземпляр без установленного постоянного места храниения.");
         }
 
-        return executeTransition(id, CopyEvent.MAKE_AVAILABLE, "AVAILABLE");
+        return executeTransition(id, CopyEvent.MAKE_AVAILABLE);
     }
 
     @Override
     @Transactional
     public CopyDto setReserved(UUID id) {
-        return executeTransition(id, CopyEvent.RESERVE, "RESERVED");
+        return executeTransition(id, CopyEvent.RESERVE);
     }
 
     @Override
     @Transactional
     public CopyDto cancelReserve(UUID id) {
-        return executeTransition(id, CopyEvent.CANCEL_RESERVE, "AVAILABLE");
+        return executeTransition(id, CopyEvent.CANCEL_RESERVE);
     }
 
     @Override
     @Transactional
     public CopyDto setIssued(UUID id) {
-        return executeTransition(id, CopyEvent.ISSUE, "ISSUED");
+        return executeTransition(id, CopyEvent.ISSUE);
     }
 
     @Override
     @Transactional
     public CopyDto setInTransit(UUID id) {
-        return executeTransition(id, CopyEvent.RETURN, "IN_TRANSIT");
+        return executeTransition(id, CopyEvent.RETURN);
     }
 
     @Override
     @Transactional
     public CopyDto setShelved(UUID id) {
-        return executeTransition(id, CopyEvent.SHELVE, "AVAILABLE");
+        return executeTransition(id, CopyEvent.SHELVE);
     }
 
     @Override
     @Transactional
     public CopyDto setWrittenOff(UUID id) {
-        return executeTransition(id, CopyEvent.WRITE_OFF, "WRITTEN_OFF");
+        return executeTransition(id, CopyEvent.WRITE_OFF);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public CopyDto getCopy(UUID id) {
-        Copy copy = copyRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Экземпляр с id " + id + " не найден."));
-        return copyMapper.toDto(copy);
-    }
-
-    private CopyDto executeTransition(UUID id, CopyEvent event, String targetStatusName) {
+    /**
+     * Производит переход экземплара книги из 1 состояния в другое посредством собыния - входного параметра перехода
+     * @param id id экземпляра
+     * @param event входной параметр функции перехода машины состояний
+     * @return dto экземпляра
+     */
+    private CopyDto executeTransition(UUID id, CopyEvent event) {
         Copy copy = copyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Экземпляр с id " + id + " не найден."));
 
@@ -202,6 +202,14 @@ public class CopyServiceImpl implements CopyService {
         log.info("Экземпляр {} переведён из {} в {} через событие {}",
                 id, copy.getStatus(), newStatus, event);
 
+        return copyMapper.toDto(copy);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CopyDto getCopy(UUID id) {
+        Copy copy = copyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Экземпляр с id " + id + " не найден."));
         return copyMapper.toDto(copy);
     }
 
@@ -228,27 +236,9 @@ public class CopyServiceImpl implements CopyService {
         PageData pageData = criteria.getPageData();
 
         Specification<Copy> spec = specBuilder.fromCriteria(searchCriteria);
-        PageRequest pageRequest = buildPageRequest(pageData, sortCriteria);
+        PageRequest pageRequest = CopyPageRequestUtils.buildPageRequest(pageData, sortCriteria);
 
         Page<Copy> copyPage = copyRepository.findAll(spec, pageRequest);
         return copyPage.map(copyMapper::toShortDto);
-    }
-
-    private PageRequest buildPageRequest(PageData pageData, CopySortCriteria sortCriteria) {
-        int page = pageData != null ? pageData.getPage() : 0;
-        int size = pageData != null && pageData.getSize() > 0 ? pageData.getSize() : 20;
-
-        if (sortCriteria == null || sortCriteria.getSortBy() == null) {
-            return PageRequest.of(page, size, Sort.by("name").ascending());
-        }
-
-        String sortField = sortCriteria.getSortBy()
-                .getFieldName();
-
-        Sort.Direction direction = sortCriteria.getSortDirection() != null
-                ? sortCriteria.getSortDirection()
-                : Sort.Direction.ASC;
-
-        return PageRequest.of(page, size, Sort.by(direction, sortField));
     }
 }

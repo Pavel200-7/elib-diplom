@@ -24,7 +24,6 @@ public class CopySpecificationBuilderImpl implements CopySpecificationBuilder {
                 .and(byStatus(criteria.getStatus()));
     }
 
-
     private Specification<Copy> byInventoryNumber(String inventoryNumber) {
         return (root, query, cb) -> {
             if (inventoryNumber == null || inventoryNumber.isBlank()) {

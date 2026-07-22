@@ -13,7 +13,7 @@
             <SidebarGroup :items="dictionaries">
                 <template v-slot:title>Справочники</template>
             </SidebarGroup>
-
+            
             <SidebarGroup :items="entities">
                 <template v-slot:title>Управление</template>
             </SidebarGroup>
@@ -40,12 +40,14 @@ const dictionaries = [
     { path: '/admin/rooms', title: 'Помещения', icon: 'House' },
     { path: '/admin/authors', title: 'Авторы', icon: 'User' },
     { path: '/admin/publishings', title: 'Издательства', icon: 'OfficeBuilding' },
-    { path: '/admin/holders', title: 'Места хранения', icon: 'Tickets' }
+    { path: '/admin/holders', title: 'Места хранения', icon: 'Tickets' },
 ]
 
 // Основные компоненты
 const entities = [
     { path: '/admin/books', title: 'Книги', icon: 'Notebook' },
+    { path: '/admin/users', title: 'Пользователи', icon: 'User' },
+
 ]
 </script>
 

@@ -116,6 +116,12 @@ const routes = [
                 name: 'AdminCopies',
                 component: () => import('@/views/admin/copies/Copies.vue'),
                 props: true 
+            },
+            {
+                path: 'users', 
+                name: 'AdminUsers',
+                component: () => import('@/views/admin/users/Users.vue'),
+                props: true 
             }
         ]
     }

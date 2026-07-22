@@ -1,9 +1,12 @@
 package com.example.elib.user.controller;
 
+import com.example.elib.user.dto.request.GetUserCriteriaDto;
 import com.example.elib.user.service.UserService;
 import com.example.elib.user.dto.request.UpdateUserDto;
 import com.example.elib.user.dto.response.UserDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +43,12 @@ public class UserController {
     @GetMapping("/search")
     public ResponseEntity<List<UserDto>> searchUsers(@RequestParam String query) {
         List<UserDto> users = userService.searchUsers(query);
+        return ResponseEntity.ok(users);
+    }
+
+    @PostMapping("/page")
+    public ResponseEntity<Page<UserDto>> getUserPage(@Valid @RequestBody GetUserCriteriaDto criteria) {
+        Page<UserDto> users = userService.getUsersPage(criteria);
         return ResponseEntity.ok(users);
     }
 }
