@@ -22,7 +22,7 @@ public class User extends BaseEntity {
     @Setter(AccessLevel.NONE)
     private UUID id;
 
-    @Column(name = "reader_book_number", length = 7)
+    @Column(name = "reader_book_number", nullable = false)
     private String readerBookNumber;
 
     @Embedded
@@ -32,7 +32,7 @@ public class User extends BaseEntity {
     @Embedded
     private PersonalData personalData;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserStatus status;
 

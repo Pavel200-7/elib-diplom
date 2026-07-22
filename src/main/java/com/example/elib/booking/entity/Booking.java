@@ -23,14 +23,14 @@ public class Booking extends BaseEntity {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "copy_id")
+    @JoinColumn(name = "copy_id", nullable = false)
     private Copy copy;
 
-    @Column(name = "started")
+    @Column(name = "started", nullable = false)
     private LocalDateTime started;
 
     @Column(name = "finishing")
@@ -39,7 +39,7 @@ public class Booking extends BaseEntity {
     @Column(name = "finished")
     private LocalDateTime finished;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private BookingStatus status;
 

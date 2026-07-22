@@ -28,7 +28,7 @@ public class Publishing extends BaseEntity {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id")
+    @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
     public static Publishing create(String name, String description, Country country) {

@@ -25,7 +25,7 @@ public class Author extends BaseEntity {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id")
+    @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
     public static Author create(String name, Country country) {

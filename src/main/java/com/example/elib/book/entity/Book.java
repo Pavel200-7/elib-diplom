@@ -37,7 +37,7 @@ public class Book extends BaseEntity {
     private Genre genre;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "literature_group_id")
+    @JoinColumn(name = "literature_group_id", nullable = false)
     private LiteratureGroup literatureGroup;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -48,13 +48,13 @@ public class Book extends BaseEntity {
     @JoinColumn(name = "language_id", nullable = false)
     private Language language;
 
-    @Column(name = "pages")
+    @Column(name = "pages", nullable = false)
     private Integer pages;
 
-    @Column(name = "publication_year")
+    @Column(name = "publication_year", nullable = false)
     private Integer publicationYear;
 
-    @Column(name = "age_restrictions")
+    @Column(name = "age_restrictions", nullable = false)
     @Enumerated(EnumType.STRING)
     private AgeRestrictions ageRestrictions;
 

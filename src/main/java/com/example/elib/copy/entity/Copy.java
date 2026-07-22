@@ -28,14 +28,14 @@ public class Copy extends BaseEntity {
     @Column(name = "inventory_number", nullable = false, unique = true, length = 12)
     private String inventoryNumber;
 
-    @Column(name = "isbn", length = 20)
+    @Column(name = "isbn", nullable = false, unique = true, length = 13)
     private String isbn;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    @Column(name = "status", nullable = false, length = 30)
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private CopyStatus status;
 
@@ -82,8 +82,8 @@ public class Copy extends BaseEntity {
         if (inventoryNumber == null || inventoryNumber.isBlank()) {
             throw new IllegalArgumentException("Инвентарный номер не может быть пустым.");
         }
-        if (inventoryNumber.length() > 50) {
-            throw new IllegalArgumentException("Инвентарный номер не может превышать 50 символов.");
+        if (inventoryNumber.length() > 12) {
+            throw new IllegalArgumentException("Инвентарный номер не может превышать 12 символов.");
         }
         if (!inventoryNumber.matches("^[A-Za-z0-9\\-\\/]+$")) {
             throw new IllegalArgumentException(
@@ -94,8 +94,8 @@ public class Copy extends BaseEntity {
 
     private void validateIsbn(String isbn) {
         if (isbn != null && !isbn.isBlank()) {
-            if (isbn.length() > 20) {
-                throw new IllegalArgumentException("ISBN не может превышать 20 символов.");
+            if (isbn.length() > 13) {
+                throw new IllegalArgumentException("ISBN не может превышать 13 символов.");
             }
             String cleanIsbn = isbn.replaceAll("[\\s\\-]", "");
             if (!cleanIsbn.matches("^(97[89])?\\d{9}[\\dX]$")) {

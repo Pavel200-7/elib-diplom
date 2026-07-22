@@ -23,9 +23,12 @@ public class Language extends BaseEntity {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
+    public Language(String name) {
+        this.name = name;
+    }
+
     public static Language create(String name) {
-        Language language = new Language();
-        language.name = name;
+        Language language = new Language(name);
         language.validate();
         return language;
     }

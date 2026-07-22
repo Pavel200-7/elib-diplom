@@ -26,10 +26,10 @@ public class Holder extends BaseEntity {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
+    @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     private HolderType type;
 

@@ -23,9 +23,12 @@ public class LiteratureGroup extends BaseEntity {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
+    private LiteratureGroup(String name) {
+        this.name = name;
+    }
+
     public static LiteratureGroup create(String name) {
-        LiteratureGroup group = new LiteratureGroup();
-        group.name = name;
+        LiteratureGroup group = new LiteratureGroup(name);
         group.validate();
         return group;
     }

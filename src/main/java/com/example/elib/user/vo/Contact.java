@@ -20,11 +20,11 @@ public class Contact {
 
     @Email(message = "Неверный формат email")
     @Size(max = 254, message = "Превышено ограничение в 254 символа")
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Pattern(regexp = "^\\+?[0-9\\s\\-()]{10,20}$", message = "Неверный формат телефона")
-    @Column(name = "phone")
+    @Column(name = "phone", nullable = false)
     private String phone;
 
     public static Contact of(String email, String phone) {

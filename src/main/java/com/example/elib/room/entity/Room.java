@@ -21,10 +21,12 @@ public class Room extends BaseEntity {
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
+    private Room(String name) {
+        this.name = name;
+    }
+
     public static Room create(String name) {
-        Room room = new Room();
-        room.name = name;
-        return room;
+        return new Room(name);
     }
 
     public void update(String name) {
