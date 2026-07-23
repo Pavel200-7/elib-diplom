@@ -67,7 +67,7 @@ public class CountryServiceImpl implements CountryService {
     @Override
     @Transactional(readOnly = true)
     public List<CountryDto> getAllCountries() {
-        return countryRepository.findAll().stream()
+        return countryRepository.findAllByOrderByNameAsc().stream()
                 .map(countryMapper::toDto)
                 .toList();
     }

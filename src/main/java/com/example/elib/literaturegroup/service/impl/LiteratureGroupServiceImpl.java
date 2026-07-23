@@ -64,7 +64,7 @@ public class LiteratureGroupServiceImpl implements LiteratureGroupService {
     @Override
     @Transactional(readOnly = true)
     public List<LiteratureGroupDto> getAllLiteratureGroups() {
-        return literatureGroupRepository.findAll().stream()
+        return literatureGroupRepository.findAllByOrderByNameAsc().stream()
                 .map(literatureGroupMapper::toDto)
                 .toList();
     }

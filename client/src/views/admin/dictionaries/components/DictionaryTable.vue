@@ -8,7 +8,17 @@
             </el-button>
         </div>
 
-        <el-table :data="items" v-loading="loading" stripe>
+        <div class="search">
+            <el-input
+                v-model="filterQuery"
+                placeholder="Поиск"
+                style="width: 100%"
+                clearable
+            >
+            </el-input>
+        </div>
+
+        <el-table :data="displayingItems" v-loading="loading" stripe>
             <el-table-column 
                 v-for="field in displayFields" 
                 :key="field.key" 
@@ -91,14 +101,41 @@ const isEdit = ref(false)
 const form = ref({})
 const toDelete = ref(null)
 const formRef = ref()
+const filterQuery = ref('')
 
 
 const emit = defineEmits(['load','create', 'update', 'delete'])
 const props = defineProps(['title', 'displayFields', 'rules', 'items', 'loading'])
 
+const displayingItems = computed(() => {
+    return filter(props.items)
+})
+
+
+
+const filter = (items) => {
+    const query = filterQuery.value
+    
+    if (!query || query.trim() === '') {
+        return items
+    }
+
+    const normalizedQuery = query.toLowerCase().trim()
+    
+    return items.filter(item => {
+        return Object.values(item).some(value => {
+            if (typeof value === 'string') {
+                return value.toLowerCase().includes(normalizedQuery)
+            }
+            if (typeof value === 'number') {
+                return String(value).includes(normalizedQuery)
+            }
+            return false
+        })
+    })
+}
 
 const dialogTitle = computed(() => isEdit.value ? "Редактировать" : "Создать")
-
 
 const loadItems = async () => {
     emit('load')

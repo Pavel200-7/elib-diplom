@@ -1,10 +1,5 @@
 -- Доменные таблицы
 
-CREATE TYPE USER_STATUS AS ENUM (
-    'created',
-    'activated'
-);
-
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     reader_book_number VARCHAR(7) UNIQUE NOT NULL,
@@ -14,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
     last_name VARCHAR(255),
     patronymic VARCHAR(255),
     birth_date DATE,
-    status USER_STATUS NOT NULL,
+    status VARCHAR(20) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -66,6 +61,7 @@ CREATE TABLE IF NOT EXISTS literature_groups (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+
 CREATE TABLE IF NOT EXISTS rooms (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(255) UNIQUE NOT NULL,
@@ -73,31 +69,14 @@ CREATE TABLE IF NOT EXISTS rooms (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TYPE HOLDER_TYPE AS ENUM (
-    'shelf',
-    'cabinet',
-    'rack',
-    'depository',
-    'display',
-    'locker'
-);
-
 CREATE TABLE IF NOT EXISTS holders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(255) NOT NULL,
     room_id UUID NOT NULL,
-    type HOLDER_TYPE NOT NULL,
+    type VARCHAR(20) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (room_id) REFERENCES rooms(id)
-);
-
-CREATE TYPE AGE_RESTRICTIONS AS ENUM (
-    '0+',
-    '6+',
-    '12+',
-    '16+',
-    '18+'
 );
 
 CREATE TABLE IF NOT EXISTS books (
@@ -110,7 +89,7 @@ CREATE TABLE IF NOT EXISTS books (
     language_id UUID NOT NULL,
     pages INTEGER NOT NULL,
     publication_year INTEGER NOT NULL,
-    age_restrictions AGE_RESTRICTIONS NOT NULL,
+    age_restrictions VARCHAR(20) NOT NULL,
     description TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -121,33 +100,17 @@ CREATE TABLE IF NOT EXISTS books (
     FOREIGN KEY (language_id) REFERENCES languages(id)
 );
 
-CREATE TYPE COPY_STATUS AS ENUM (
-    'added',
-    'available',
-    'in_transit',
-    'reserved',
-    'issued',
-    'written_off'
-);
-
 CREATE TABLE IF NOT EXISTS copies (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     holder_id UUID,
     inventory_number VARCHAR(12) NOT NULL UNIQUE,
     isbn VARCHAR(13) NOT NULl UNIQUE,
     book_id UUID NOT NULL,
-    status COPY_STATUS NOT NULL,
+    status VARCHAR(20) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (holder_id) REFERENCES holders(id),
     FOREIGN KEY (book_id) REFERENCES books(id)
-);
-
-CREATE TYPE BOOKING_STATUS AS ENUM (
-    'reserved',
-    'issued',
-    'closed',
-    'cancelled'
 );
 
 CREATE TABLE IF NOT EXISTS bookings (
@@ -157,7 +120,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     started TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     finishing TIMESTAMP,
     finished TIMESTAMP,
-    status BOOKING_STATUS NOT NULL,
+    status VARCHAR(20) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),

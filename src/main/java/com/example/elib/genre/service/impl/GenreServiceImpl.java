@@ -63,7 +63,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     @Transactional(readOnly = true)
     public List<GenreDto> getAllGenres() {
-        return genreRepository.findAll().stream()
+        return genreRepository.findAllByOrderByNameAsc().stream()
                 .map(genreMapper::toDto)
                 .toList();
     }

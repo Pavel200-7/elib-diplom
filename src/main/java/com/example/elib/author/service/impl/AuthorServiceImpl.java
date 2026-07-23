@@ -75,7 +75,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional(readOnly = true)
     public List<AuthorDto> getAllAuthors() {
-        return authorRepository.findAll().stream()
+        return authorRepository.findAllByOrderByNameAsc().stream()
                 .map(authorMapper::toDto)
                 .toList();
     }

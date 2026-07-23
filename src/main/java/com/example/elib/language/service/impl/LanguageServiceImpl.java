@@ -64,7 +64,7 @@ public class LanguageServiceImpl implements LanguageService {
     @Override
     @Transactional(readOnly = true)
     public List<LanguageDto> getAllLanguages() {
-        return languageRepository.findAll().stream()
+        return languageRepository.findAllByOrderByNameAsc().stream()
                 .map(languageMapper::toDto)
                 .toList();
     }

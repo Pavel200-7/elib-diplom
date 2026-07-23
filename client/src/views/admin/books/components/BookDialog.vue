@@ -140,7 +140,6 @@ const rules = {
 
 const dialogTitle = computed(() => props.isEdit ? 'Редактировать книгу' : 'Добавить книгу')
 
-// Внутренняя видимость для v-model диалога
 const visible = computed({
     get: () => props.visible,
     set: (val) => emit('update:visible', val)
@@ -189,7 +188,6 @@ function setFormData(data) {
     }
 }
 
-// Следим за открытием диалога и заполняем форму
 watch(() => props.visible, (newVal) => {
     if (newVal) {
         setFormData(props.initialData)
@@ -210,10 +208,6 @@ const handleSave = async () => {
         } else {
             emit('save', { data })
         }
-        
-        // Закрываем диалог только если сохранение прошло успешно
-        // (родительский компонент сам решит закрывать или нет)
-        
     } catch (error) {
         ElMessage.error(error.response?.data?.message || 'Ошибка сохранения')
     } finally {
@@ -227,9 +221,12 @@ const handleClose = () => {
     resetForm()
 }
 
-// Экспонируем методы для родителя
 defineExpose({
     setFormData,
     resetForm
 })
 </script>
+
+<style scoped>
+
+</style>

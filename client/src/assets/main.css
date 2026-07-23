@@ -1,0 +1,33 @@
+/* Глобальные стили для всех форм */
+
+/* Это нужно для настройки label в формах elment plus (верх) */
+.el-form-item {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.el-form-item__label {
+    line-height: 1.2;
+    padding-top: 6px;
+    white-space: normal;
+    word-break: break-word;
+    flex-shrink: 0;
+}
+
+.el-form-item__content {
+    line-height: 1.2;
+    flex: 1;
+    min-width: 0;
+}
+
+.el-row {
+    margin-bottom: 0 !important;
+}
+
+.el-col {
+    display: flex;
+    align-items: flex-start;
+}
+
+/* Это нужно для настройки label в формах elment plus (низ) */
