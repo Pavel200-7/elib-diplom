@@ -7,15 +7,18 @@ import lombok.*;
 /**
  * Номер страницы и количество позиций на одной странице
  */
-@Value
+@Data
 @Builder
-@NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 public class PageData {
 
     @Min(0)
+    @Builder.Default
     private Integer page = 0;
 
     @Min(0)
     @Max(100)
+    @Builder.Default
     private Integer size = 20;
 }

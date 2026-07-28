@@ -129,9 +129,9 @@ CREATE TABLE IF NOT EXISTS bookings (
 
 -- Технические таблицы
 
-CREATE TABLE IF NOT EXISTS sequence_counters (
+CREATE TABLE IF NOT EXISTS sequences (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    counter_name VARCHAR(255) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL UNIQUE,
     current_value BIGINT NOT NULL DEFAULT 0,
     version BIGINT
 )

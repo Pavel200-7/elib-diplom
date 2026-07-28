@@ -3,7 +3,7 @@ package com.example.elib.common.service.impl;
 import com.example.elib.common.enums.Sequences;
 import com.example.elib.common.repository.helper.SequenceCounter;
 import com.example.elib.common.service.Generator;
-import com.example.elib.common.service.InventoryNumberGenerator;
+import com.example.elib.common.service.ReaderNumberGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,18 +11,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-public class InventoryNumberGeneratorImpl implements InventoryNumberGenerator {
+public class ReaderNumberGeneratorImpl implements ReaderNumberGenerator {
 
-    private static final String PREFIX = "INV-";
-    private static final String FORMAT = "%08d";
+    private static final String FORMAT = "%07d";
 
     private final Generator<String> delegate;
 
-    public InventoryNumberGeneratorImpl(SequenceCounter sequenceCounter) {
+    public ReaderNumberGeneratorImpl(SequenceCounter sequenceCounter) {
         this.delegate = new SequenceNumberGenerator(
                 sequenceCounter,
-                Sequences.COPIES_COUNTER,
-                PREFIX.concat(FORMAT)
+                Sequences.READERS_COUNTER,
+                FORMAT
         );
     }
 

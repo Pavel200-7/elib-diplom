@@ -122,6 +122,12 @@ const routes = [
                 name: 'AdminUsers',
                 component: () => import('@/views/admin/users/Users.vue'),
                 props: true 
+            },
+            {
+                path: 'users/details:id', 
+                name: 'AdminUsersDetails',
+                component: () => import('@/views/admin/users/UserDetails.vue'),
+                props: true 
             }
         ]
     }

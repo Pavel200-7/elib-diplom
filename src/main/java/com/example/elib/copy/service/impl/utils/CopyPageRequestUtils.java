@@ -4,6 +4,7 @@ import com.example.elib.common.dto.pagination.PageData;
 import com.example.elib.copy.dto.request.pagination.CopySortCriteria;
 import com.example.elib.copy.enums.CopySortField;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 public final class CopyPageRequestUtils {
@@ -15,7 +16,7 @@ public final class CopyPageRequestUtils {
         throw new UnsupportedOperationException("Static Utility class cannot be instantiated");
     }
 
-    public static PageRequest buildPageRequest(PageData pageData, CopySortCriteria sortCriteria) {
+    public static Pageable buildPageRequest(PageData pageData, CopySortCriteria sortCriteria) {
         int page = pageData != null ? pageData.getPage() : 0;
         int size = pageData != null && pageData.getSize() > 0 ? pageData.getSize() : DEFAULT_PAGE_SIZE;
 

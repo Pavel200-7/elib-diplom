@@ -30,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -236,7 +237,7 @@ public class CopyServiceImpl implements CopyService {
         PageData pageData = criteria.getPageData();
 
         Specification<Copy> spec = specBuilder.fromCriteria(searchCriteria);
-        PageRequest pageRequest = CopyPageRequestUtils.buildPageRequest(pageData, sortCriteria);
+        Pageable pageRequest = CopyPageRequestUtils.buildPageRequest(pageData, sortCriteria);
 
         Page<Copy> copyPage = copyRepository.findAll(spec, pageRequest);
         return copyPage.map(copyMapper::toShortDto);

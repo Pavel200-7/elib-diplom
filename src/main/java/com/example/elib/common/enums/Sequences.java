@@ -5,8 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Counters {
-    COPIES_COUNTER("copies_counter");
+public enum Sequences {
+    COPIES_COUNTER("copies_counter"),
+    READERS_COUNTER("readers_counter");
 
     private final String name;
 }

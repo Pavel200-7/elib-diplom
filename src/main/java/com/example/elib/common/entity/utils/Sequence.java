@@ -8,17 +8,17 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Entity
-@Table(name = "sequence_counters")
+@Table(name = "sequences")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SequenceCounter {
+public class Sequence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "counter_name", nullable = false, unique = true)
-    private String counterName;
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
 
     @Column(name = "current_value", nullable = false)
     private Long currentValue = 0L;
@@ -27,8 +27,8 @@ public class SequenceCounter {
     @Column(name = "version")
     private Long version;
 
-    public SequenceCounter(String counterName) {
-        this.counterName = counterName;
+    public Sequence(String name) {
+        this.name = name;
     }
 
     public Long nextValue() {

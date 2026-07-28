@@ -6,6 +6,7 @@ import com.example.elib.user.dto.request.UpdateUserDto;
 import com.example.elib.user.dto.response.UserDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -40,14 +42,10 @@ public class UserController {
         return ResponseEntity.ok(activatedUser);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<UserDto>> searchUsers(@RequestParam String query) {
-        List<UserDto> users = userService.searchUsers(query);
-        return ResponseEntity.ok(users);
-    }
-
     @PostMapping("/page")
     public ResponseEntity<Page<UserDto>> getUserPage(@Valid @RequestBody GetUserCriteriaDto criteria) {
+        log.info("Номер страницы {}", criteria.getPageData().getPage().toString());
+        log.info("Размер страницы {}",criteria.getPageData().getSize().toString());
         Page<UserDto> users = userService.getUsersPage(criteria);
         return ResponseEntity.ok(users);
     }

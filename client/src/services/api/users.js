@@ -1,15 +1,11 @@
 import client from '../client/client'
 
-export const searchUsers = (query) => {
-    return client.get('/api/v1/users/search', { params: { query } })
+export const getUserPage = (criteria) => {
+    return client.post(`/api/v1/users/page`, criteria)
 }
 
 export const getUserById = (id) => {
     return client.get(`/api/v1/users/${id}`)
-}
-
-export const getAllUsers = (params) => {
-    return client.get('/api/v1/users', { params })
 }
 
 export const updateUser = (id, data) => {

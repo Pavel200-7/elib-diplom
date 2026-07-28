@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import * as api from '../api/users'
 
-export function useBook() {
+export function useUser() {
     const user = ref(null)
     const users = ref([])
 
@@ -10,7 +10,7 @@ export function useBook() {
     const total = ref(0)
 
     const filters = {
-        search: '',
+        query: ''
     }
 
     const loading = ref(false)
@@ -32,31 +32,33 @@ export function useBook() {
 
     const getUsers = async () => {
         const criteria = buildCriteria()
-        const responseData = await handleRequest(() => api.getAll(criteria))
+        const responseData = await handleRequest(() => api.getUserPage(criteria))
         users.value = responseData.content
         total.value = responseData.totalElements
+        console.log(users.value)
         return responseData
     }
 
-    const getBook = async (id) => {
-        const responseData = await handleRequest(() => api.getById(id))
+    const getUser = async (id) => {
+        const responseData = await handleRequest(() => api.getUserById(id))
         user.value = responseData
         addNewOrUpdate(id, responseData)
         return responseData
     }
 
-    const createBook = async (data) => {
-        console.log(data)
-        const responseData = await handleRequest(() => api.create(data))
+    const updateUser = async (id, data) => {
+        const responseData = await handleRequest(() => api.updateUser(id, data))
         user.value = responseData
-        addNewOrUpdate(responseData.id, responseData)
+        addNewOrUpdate(id, responseData)
+        getUsers()
         return responseData
     }
 
-    const updateBook = async (id, data) => {
-        const responseData = await handleRequest(() => api.update(id, data))
+    const activateUser = async (id) => {
+        const responseData = await handleRequest(() => api.activateUser(id))
         user.value = responseData
         addNewOrUpdate(id, responseData)
+        getUsers()
         return responseData
     }
 
@@ -71,24 +73,10 @@ export function useBook() {
         }
     }
 
-    const deleteBook = async (id) => {
-        await handleRequest(() => api.deleteItem(id))
-        users.value = users.value.filter((user) => user.id !== id)
-        if (user.value?.id === id) {
-            user.value = null
-        }
-    }
-
     const buildCriteria = () => {
         const criteria = {
             searchCriteria: {
-                name: filters.name || null,
-                authorId: filters.authorId || null,
-                genreId: filters.genreId || null
-            },
-            sortCriteria: {
-                sortBy: 'NAME',
-                sortDirection: 'ASC'
+                query: filters.query || null
             },
             pageData: {
                 page: page.value,
@@ -99,18 +87,19 @@ export function useBook() {
     }
 
     const setFilters = (filter) => {
-        filters.name = filter.name
-        filters.authorId = filter.authorId
-        filters.genreId = filter.genreId
+        filters.query = filter.query || ''
         page.value = 0
     }
 
     const resetFilters = () => {
-        filters.name = ''
-        filters.authorId = null
-        filters.genreId = null
+        filters.query = ''
         page.value = 0
     }
+
+    const statuses = [
+        { value: 'CREATED', label: 'Создан' },
+        { value: 'ACTIVATED', label: 'Активирован' }
+    ]
 
     return {
         // state
@@ -121,13 +110,13 @@ export function useBook() {
         total,
         loading,
         error,
+        statuses,
 
         //methods
         getUsers,
-        getBook,
-        createBook,
-        updateBook,
-        deleteBook,
+        getUser,
+        updateUser,
+        activateUser,
 
         setFilters,
         resetFilters

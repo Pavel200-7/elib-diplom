@@ -1,5 +1,7 @@
 <template>
     <div class="copies-list">
+        <el-page-header @back="goBack" content="Экземпляры книг" />
+
         <CopyHeader 
             @add="openCreateCopyDialog()"
             @add-batch="openCreateCopiesDialog()"

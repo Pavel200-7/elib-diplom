@@ -22,7 +22,7 @@ public class User extends BaseEntity {
     @Setter(AccessLevel.NONE)
     private UUID id;
 
-    @Column(name = "reader_book_number", nullable = false)
+    @Column(name = "reader_book_number", nullable = false, length = 7)
     private String readerBookNumber;
 
     @Embedded
@@ -36,21 +36,15 @@ public class User extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private UserStatus status;
 
-    private User(Contact contact, UUID id) {
+    private User(Contact contact, UUID id, String readerBookNumber) {
         this.id = id;
         this.contact = contact;
         this.status = UserStatus.CREATED;
-        this.readerBookNumber = generateReaderBookNumberFromId(id);
+        this.readerBookNumber = readerBookNumber;
     }
 
-    private String generateReaderBookNumberFromId(UUID id) {
-        long highBits = id.getMostSignificantBits();
-        long number = Math.abs(highBits % 10_000_000);
-        return String.format("%07d", number);
-    }
-
-    public static User register(Contact contact, UUID id) {
-        return new User(contact, id);
+    public static User register(Contact contact, UUID id, String readerBookNumber) {
+        return new User(contact, id, readerBookNumber);
     }
 
     public void activate() {

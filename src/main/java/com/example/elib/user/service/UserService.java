@@ -14,7 +14,5 @@ public interface UserService {
     UserDto getUser(UUID id);
     UserDto updateUser(UUID id, UpdateUserDto dto);
     UserDto activateUser(UUID id);
-    List<UserDto> searchUsers(String query);
     Page<UserDto> getUsersPage(GetUserCriteriaDto criteria);
-
 }

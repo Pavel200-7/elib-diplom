@@ -1,6 +1,5 @@
 <template>
     <div class="header">
-        <h2>Экземпляры книг</h2>
         <div>
             <el-button type="success" @click="handleAddBatch">
                 <el-icon><DocumentAdd /></el-icon>
@@ -31,7 +30,7 @@ const handleAdd = () => {
 <style scoped>
 .header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     margin-bottom: 24px;
 }
