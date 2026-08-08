@@ -3,7 +3,6 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        // Эта зависимость нужна именно плагину Gradle
         classpath "org.flywaydb:flyway-database-postgresql:12.10.0"
     }
 }
@@ -37,6 +36,7 @@ repositories {
 }
 ext {
     testcontainersVersion = '1.21.4'
+    mapstructVersion = '1.5.5.Final'
 }
 
 dependencies {
@@ -63,8 +63,8 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
     implementation 'com.github.oxo42:stateless4j:2.5.0'
