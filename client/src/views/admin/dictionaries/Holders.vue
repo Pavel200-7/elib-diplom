@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import DictionaryTable from '@/views/admin/dictionaries/components/DictionaryTable.vue'
+import DictionaryTable from '@/components/dictionaries/DictionaryTable.vue'
 import { useHolder } from '@/services/composables/useHolder'
 import { useRoom } from '@/services/composables/useRoom'
 import { onMounted, computed } from 'vue'

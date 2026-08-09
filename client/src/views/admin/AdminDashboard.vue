@@ -27,9 +27,7 @@
 </template>
 
 <script setup>
-import SidebarGroup from './component/SidebarGroup.vue'
-
-import { Flag, Collection, User, OfficeBuilding, Reading, Grid, House, Tickets, Notebook } from '@element-plus/icons-vue'
+import SidebarGroup from '@/components/common/sidebar/AdminSidebarGroup.vue'
 
 // Простые справочники (используют универсальный DictionaryCrud)
 const dictionaries = [

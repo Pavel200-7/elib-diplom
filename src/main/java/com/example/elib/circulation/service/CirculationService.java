@@ -5,11 +5,6 @@ import com.example.elib.booking.dto.response.BookingDto;
 import java.util.UUID;
 
 public interface CirculationService {
-    BookingDto reserveBook(UUID userId, UUID bookId);
-    BookingDto reserveCopy(UUID userId, UUID copyId);
-    BookingDto cancelReservation(UUID bookingId);
-    BookingDto issueFromReservation(UUID bookingId);
-    BookingDto issueDirect(UUID userId, UUID bookId);
-    BookingDto issueDirectCopy(UUID userId, UUID copyId);
+    BookingDto issueCopy(UUID userId, UUID copyId);
     BookingDto returnBook(UUID bookingId);
 }

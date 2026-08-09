@@ -16,51 +16,12 @@ public class CirculationController {
 
     private final CirculationService circulationService;
 
-    @PostMapping("/reserve/book")
-    public ResponseEntity<BookingDto> reserveBook(
-            @RequestParam UUID userId,
-            @RequestParam UUID bookId
-    ) {
-        BookingDto booking = circulationService.reserveBook(userId, bookId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(booking);
-    }
-
-    @PostMapping("/reserve/copy")
-    public ResponseEntity<BookingDto> reserveCopy(
-            @RequestParam UUID userId,
-            @RequestParam UUID copyId
-    ) {
-        BookingDto booking = circulationService.reserveCopy(userId, copyId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(booking);
-    }
-
-    @PutMapping("/reservation/{bookingId}")
-    public ResponseEntity<BookingDto> cancelReservation(@PathVariable UUID bookingId) {
-        BookingDto booking = circulationService.cancelReservation(bookingId);
-        return ResponseEntity.ok(booking);
-    }
-
-    @PutMapping("/issue/from-reservation/{bookingId}")
-    public ResponseEntity<BookingDto> issueFromReservation(@PathVariable UUID bookingId) {
-        BookingDto booking = circulationService.issueFromReservation(bookingId);
-        return ResponseEntity.ok(booking);
-    }
-
-    @PostMapping("/issue/direct/book")
-    public ResponseEntity<BookingDto> issueDirect(
-            @RequestParam UUID userId,
-            @RequestParam UUID bookId
-    ) {
-        BookingDto booking = circulationService.issueDirect(userId, bookId);
-        return ResponseEntity.ok(booking);
-    }
-
     @PostMapping("/issue/direct/copy")
-    public ResponseEntity<BookingDto> issueDirectCopy(
+    public ResponseEntity<BookingDto> issueCopy(
             @RequestParam UUID userId,
             @RequestParam UUID copyId
     ) {
-        BookingDto booking = circulationService.issueDirectCopy(userId, copyId);
+        BookingDto booking = circulationService.issueCopy(userId, copyId);
         return ResponseEntity.ok(booking);
     }
 

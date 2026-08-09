@@ -33,9 +33,9 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 
-import UserHeader from './components/users/UserHeader.vue'
-import UserFilter from './components/users/UserFilter.vue'
-import UserTable from './components/users/UserTable.vue'
+import UserHeader from '@/components/users/users/UserHeader.vue'
+import UserFilter from '@/components/users/users/UserFilter.vue'
+import UserTable from '@/components/users/users/UserTable.vue'
 import Pagination from '@/components/common/Pagination.vue'
 
 import { useUser } from '@/services/composables/useUser'

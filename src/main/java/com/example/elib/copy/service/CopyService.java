@@ -18,13 +18,10 @@ public interface CopyService {
     void deleteCopy(UUID id);
     List<CopyDto> setRegularHolder(SetRegularHolderDto dto);
     CopyDto setAvailable(UUID id);
-    CopyDto setReserved(UUID id);
-    CopyDto cancelReserve(UUID id);
     CopyDto setIssued(UUID id);
     CopyDto setInTransit(UUID id);
     CopyDto setShelved(UUID id);
     CopyDto setWrittenOff(UUID id);
     CopyDto getCopy(UUID id);
-    CopyDto getRandomAvailableCopyByBookId(UUID bookId);
     Page<CopyShortDto> getCopiesPage(GetCopyCriteriaDto criteria);
 }

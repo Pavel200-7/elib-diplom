@@ -34,7 +34,6 @@
                 v-for="book in books"
                 :key="book.id"
                 :book="book"
-                @reserve="handleReserve"
             />
             
             <div v-if="!loading && books.length === 0" class="empty-state">
@@ -54,20 +53,19 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Search, Filter } from '@element-plus/icons-vue'
-import { useAuthStore } from '@/stores/auth'
+
 import { getAll as getBooksPage } from '@/services/api/books'
-import { reserveBook } from '@/services/api/circulation'
-import BookCard from '@/components/search/BookCard.vue'
-import AdvancedFilters from '@/components/search/AdvancedFilters.vue'
+
+import BookCard from '@/components/common/search/BookCard.vue'
+import AdvancedFilters from '@/components/common/search/AdvancedFilters.vue'
 import Pagination from '@/components/common/Pagination.vue'
 
 const route = useRoute()
 const router = useRouter()
-const authStore = useAuthStore()
 
 const loading = ref(false)
 const books = ref([])
@@ -77,6 +75,7 @@ const size = ref(20)
 const searchQuery = ref(route.query.q || '')
 const showAdvancedFilters = ref(false)
 const currentFilters = ref({})
+
 
 const loadBooks = async () => {
     loading.value = true
@@ -118,23 +117,6 @@ const applyFilters = (filters) => {
     currentFilters.value = filters
     page.value = 0
     loadBooks()
-}
-
-const handleReserve = async (bookId) => {
-    if (!authStore.isAuthenticated) {
-        ElMessage.warning('Для бронирования необходимо войти')
-        router.push('/')
-        return
-    }
-    
-    try {
-        await reserveBook(authStore.user?.id, bookId)
-        ElMessage.success('Книга успешно забронирована')
-        // Обновляем список, чтобы обновить доступность
-        await loadBooks()
-    } catch (error) {
-        ElMessage.error(error.response?.data?.message || 'Ошибка бронирования')
-    }
 }
 
 onMounted(() => {

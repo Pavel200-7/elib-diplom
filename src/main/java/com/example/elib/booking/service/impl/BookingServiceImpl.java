@@ -36,34 +36,6 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public BookingDto makeReservation(CreateBookingDto dto) {
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(()-> new ResourceNotFoundException("Пользователь с id " + dto.getUserId() + " не найден."));
-        Copy copy = copyRepository.findById(dto.getCopyId())
-                .orElseThrow(() -> new ResourceNotFoundException("Экземпляр с id " + dto.getCopyId() + " не найден."));
-
-        Specification<Booking> activeSpec = specBuilder.hasActiveReservationForBook(user.getId(), copy.getBook().getId());
-        if (bookingRepository.exists(activeSpec)) {
-            throw new BusinessRuleException("У вас уже есть активная бронь или выдача на эту книгу");
-        }
-
-        Booking booking = Booking.makeReservation(user, copy);
-        bookingRepository.save(booking);
-        return bookingMapper.toDto(booking);
-    }
-
-    @Override
-    @Transactional
-    public BookingDto cancelReservation(UUID id) {
-        Booking booking = bookingRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Бронь с id " + id + " не найдена."));
-        booking.cancel();
-        bookingRepository.save(booking);
-        return bookingMapper.toDto(booking);
-    }
-
-    @Override
-    @Transactional
     public BookingDto makeIssue(CreateBookingDto dto) {
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(()-> new ResourceNotFoundException("Пользователь с id " + dto.getUserId() + " не найден."));
@@ -71,16 +43,6 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new ResourceNotFoundException("Экземпляр с id " + dto.getCopyId() + " не найден."));
 
         Booking booking = Booking.makeIssue(user, copy);
-        bookingRepository.save(booking);
-        return bookingMapper.toDto(booking);
-    }
-
-    @Override
-    @Transactional
-    public BookingDto issue(UUID id) {
-        Booking booking = bookingRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Бронь с id " + id + " не найдена."));
-        booking.issue();
         bookingRepository.save(booking);
         return bookingMapper.toDto(booking);
     }

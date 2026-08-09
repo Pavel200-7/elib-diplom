@@ -9,11 +9,7 @@
                 <router-link to="/search" class="nav-link">Поиск</router-link>
                 
                 <template v-if="authStore.isAuthenticated">
-                    <router-link to="/reader" class="nav-link">Мои книги</router-link>
-                    
-                    <template v-if="authStore.isAdmin() || authStore.hasAnyRole(['MANAGER'])">
-                        <router-link to="/circulation" class="nav-link">Циркуляция</router-link>
-                    </template>
+                    <!-- <router-link to="/reader" class="nav-link">Мои книги</router-link> -->
                     <template v-if="authStore.isAdmin() || authStore.hasAnyRole(['MANAGER'])">
                         <router-link to="/admin" class="nav-link admin-link">Админка</router-link>
                     </template>

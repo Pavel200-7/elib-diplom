@@ -48,12 +48,6 @@ public class Booking extends BaseEntity {
         this.copy = copy;
     }
 
-    public static Booking makeReservation(User user, Copy copy) {
-        Booking booking = new Booking(user, copy);
-        booking.status = BookingStatus.RESERVED;
-        return booking;
-    }
-
     public static Booking makeIssue(User user, Copy copy) {
         Booking booking = new Booking(user, copy);
         setIssued(booking);
@@ -61,9 +55,6 @@ public class Booking extends BaseEntity {
     }
 
     public void issue() {
-        if (!isInStatus(BookingStatus.RESERVED)) {
-            throw new IllegalStateException("Данная бронь уже использована.");
-        }
         setIssued(this);
     }
 
@@ -72,13 +63,6 @@ public class Booking extends BaseEntity {
         booking.started = LocalDateTime.now();
         booking.finishing = LocalDateTime.now()
                 .plusMonths(2);
-    }
-
-    public void cancel() {
-        if (!isInStatus(BookingStatus.RESERVED)) {
-            throw new IllegalStateException("Бронь можно отменить только до выдачи книги.");
-        }
-        this.status = BookingStatus.CANCELLED;
     }
 
     public void finish() {

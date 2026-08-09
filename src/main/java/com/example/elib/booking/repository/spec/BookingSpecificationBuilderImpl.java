@@ -46,18 +46,6 @@ public class BookingSpecificationBuilderImpl implements BookingSpecificationBuil
 
         specs.add(byUserId(userId));
         specs.add(notFinished());
-        specs.add(notCancelled());
-
-        return buildFromList(specs);
-    }
-
-    @Override
-    public Specification<Booking> hasActiveReservationForBook(UUID userId, UUID bookId) {
-        List<Specification<Booking>> specs = new ArrayList<>();
-
-        specs.add(byUserId(userId));
-        specs.add(byBookId(bookId));
-        specs.add(byActiveStatuses());
 
         return buildFromList(specs);
     }
@@ -127,11 +115,6 @@ public class BookingSpecificationBuilderImpl implements BookingSpecificationBuil
                 cb.notEqual(root.get("status"), BookingStatus.CLOSED);
     }
 
-    private Specification<Booking> notCancelled() {
-        return (root, query, cb) ->
-                cb.notEqual(root.get("status"), BookingStatus.CANCELLED);
-    }
-
     private Specification<Booking> byBookId(UUID bookId) {
         return (root, query, cb) -> {
             if (bookId == null) {
@@ -143,7 +126,7 @@ public class BookingSpecificationBuilderImpl implements BookingSpecificationBuil
 
     private Specification<Booking> byActiveStatuses() {
         return (root, query, cb) -> {
-            List<BookingStatus> activeStatuses = List.of(BookingStatus.RESERVED, BookingStatus.ISSUED);
+            List<BookingStatus> activeStatuses = List.of(BookingStatus.ISSUED);
             return root.get("status").in(activeStatuses);
         };
     }

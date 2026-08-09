@@ -67,11 +67,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
-import BookHeader from './components/BookHeader.vue'
-import BookFilter from './components/BookFilter.vue'
+import BookHeader from '@/components/books/BookHeader.vue'
+import BookFilter from '@/components/books/BookFilter.vue'
 import Pagination from '@/components/common/Pagination.vue'
-import BookDialog from './components/BookDialog.vue'
-import BookDeleteConfirmDialog from './components/BookDeleteConfirmDialog.vue'
+import BookDialog from '@/components/books/BookDialog.vue'
+import BookDeleteConfirmDialog from '@/components/books/BookDeleteConfirmDialog.vue'
 
 import { Edit, Delete } from '@element-plus/icons-vue'
 

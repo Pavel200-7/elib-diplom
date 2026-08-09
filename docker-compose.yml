@@ -90,7 +90,7 @@ services:
       - postgres
 
   postgres:
-    image: postgres:17
+    image: postgres:18
     container_name: postgres
     ports:
       - "9090:5432"

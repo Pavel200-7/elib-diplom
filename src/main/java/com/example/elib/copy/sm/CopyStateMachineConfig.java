@@ -22,13 +22,8 @@ public class CopyStateMachineConfig {
                 .permit(CopyEvent.MAKE_AVAILABLE, CopyStatus.AVAILABLE);
 
         config.configure(CopyStatus.AVAILABLE)
-                .permit(CopyEvent.RESERVE, CopyStatus.RESERVED)
                 .permit(CopyEvent.ISSUE, CopyStatus.ISSUED)
                 .permit(CopyEvent.WRITE_OFF, CopyStatus.WRITTEN_OFF);
-
-        config.configure(CopyStatus.RESERVED)
-                .permit(CopyEvent.ISSUE, CopyStatus.ISSUED)
-                .permit(CopyEvent.CANCEL_RESERVE, CopyStatus.AVAILABLE);
 
         config.configure(CopyStatus.ISSUED)
                 .permit(CopyEvent.RETURN, CopyStatus.IN_TRANSIT);

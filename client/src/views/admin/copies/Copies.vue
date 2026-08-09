@@ -62,16 +62,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-import CopyHeader from './components/CopyHeader.vue'
-import CopyFilter from './components/CopyFilter.vue'
-import CopyBulcActions from './components/CopyBulcActions.vue'
-import CopyDialog from './components/CopyDialog.vue'
-import BatchCopyDialog from './components/BatchCopyDialog.vue'
+import CopyHeader from '@/components/copies/CopyHeader.vue'
+import CopyFilter from '@/components/copies/CopyFilter.vue'
+import CopyBulcActions from '@/components/copies/CopyBulcActions.vue'
+import CopyDialog from '@/components/copies/CopyDialog.vue'
+import BatchCopyDialog from '@/components/copies/BatchCopyDialog.vue'
 
-import CopyTable from './components/CopyTable.vue'
+import CopyTable from '@/components/copies/CopyTable.vue'
 import Pagination from '@/components/common/Pagination.vue'
 
 import { useCopy } from '@/services/composables/useCopy'

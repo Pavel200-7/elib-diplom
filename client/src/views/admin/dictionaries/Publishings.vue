@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import DictionaryTable from '@/views/admin/dictionaries/components/DictionaryTable.vue'
+import DictionaryTable from '@/components/dictionaries/DictionaryTable.vue'
 import { usePublishing } from '@/services/composables/usePublishing'
 import { useCountry } from '@/services/composables/useCountry'
 import { onMounted, computed } from 'vue'

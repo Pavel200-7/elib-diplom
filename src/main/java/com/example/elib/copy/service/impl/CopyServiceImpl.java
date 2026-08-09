@@ -142,18 +142,6 @@ public class CopyServiceImpl implements CopyService {
 
     @Override
     @Transactional
-    public CopyDto setReserved(UUID id) {
-        return executeTransition(id, CopyEvent.RESERVE);
-    }
-
-    @Override
-    @Transactional
-    public CopyDto cancelReserve(UUID id) {
-        return executeTransition(id, CopyEvent.CANCEL_RESERVE);
-    }
-
-    @Override
-    @Transactional
     public CopyDto setIssued(UUID id) {
         return executeTransition(id, CopyEvent.ISSUE);
     }
@@ -212,22 +200,6 @@ public class CopyServiceImpl implements CopyService {
         Copy copy = copyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Экземпляр с id " + id + " не найден."));
         return copyMapper.toDto(copy);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public CopyDto getRandomAvailableCopyByBookId(UUID bookId) {
-        if (!bookRepository.existsById(bookId)) {
-            throw new ResourceNotFoundException("Книга с id " + bookId + " не найдена.");
-        }
-
-        List<Copy> availableCopies = copyRepository.findByBookIdAndStatus(bookId, CopyStatus.AVAILABLE);
-        if (availableCopies.isEmpty()) {
-            throw new ResourceNotFoundException("Нет доступных экземпляров для книги с id " + bookId);
-        }
-
-        Copy randomCopy = availableCopies.get(ThreadLocalRandom.current().nextInt(availableCopies.size()));
-        return copyMapper.toDto(randomCopy);
     }
 
     @Override

@@ -6,10 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum BookingStatus {
-    RESERVED("reserved"),
     ISSUED("issued"),
-    CLOSED("closed"),
-    CANCELLED("cancelled");
+    CLOSED("closed");
 
     private final String label;
 }

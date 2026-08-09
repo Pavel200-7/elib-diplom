@@ -41,6 +41,4 @@ public class BookingController {
         List<BookingDto> bookings = bookingService.getActiveUserBookings(userId);
         return ResponseEntity.ok(bookings);
     }
-
-
 }
