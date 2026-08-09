@@ -6,7 +6,7 @@ export function useBook() {
     const books = ref([])
 
     const page = ref(0)
-    const size = ref(1)
+    const size = ref(20)
     const total = ref(0)
 
     const filters = {

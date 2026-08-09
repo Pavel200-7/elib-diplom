@@ -5,6 +5,7 @@ import com.example.elib.booking.dto.request.GetBookingCriteria;
 import com.example.elib.booking.dto.response.BookingDto;
 import com.example.elib.booking.dto.response.BookingShortDto;
 import com.example.elib.booking.entity.Booking;
+import com.example.elib.booking.enums.BookingSortField;
 import com.example.elib.booking.enums.BookingStatus;
 import com.example.elib.booking.mapper.BookingMapper;
 import com.example.elib.booking.repository.BookingRepository;
@@ -17,6 +18,8 @@ import com.example.elib.copy.repository.CopyRepository;
 import com.example.elib.user.entity.User;
 import com.example.elib.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,7 +96,8 @@ public class BookingServiceImpl implements BookingService {
     @Transactional(readOnly = true)
     public List<BookingShortDto> getUserBookingsPage(GetBookingCriteria criteria) {
         Specification<Booking> spec = specBuilder.fromCriteria(criteria);
-        List<Booking> bookings = bookingRepository.findAll(spec);
+        Sort sortBy = Sort.by(Sort.Direction.DESC, BookingSortField.STARTED.getName());
+        List<Booking> bookings = bookingRepository.findAll(spec, sortBy);
         return bookings.stream()
                 .map(bookingMapper::toShortDto)
                 .toList();

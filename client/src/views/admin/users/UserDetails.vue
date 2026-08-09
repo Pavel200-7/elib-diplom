@@ -29,7 +29,7 @@
 
             <!-- Страница 3: Выдача книг (заглушка) -->
             <div v-show="activeTab === 'issue'" class="issue-tab">
-                <UserIssuePlaceholder />
+                <UserIssue />
             </div>
         </div>
     </div>
@@ -43,7 +43,7 @@ import { useUser } from '@/services/composables/useUser'
 
 import UserInfo from '@/components/users/user-details/user-info/UserInfo.vue'
 import UserHistoryPlaceholder from '@/components/users/user-details/user-history/UserHistoryPlaceholder.vue'
-import UserIssuePlaceholder from '@/components/users/user-details/user-issue/UserIssue.vue'
+import UserIssue from '@/components/users/user-details/user-issue/UserIssue.vue'
 
 const router = useRouter()
 const route = useRoute()

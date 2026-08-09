@@ -27,12 +27,18 @@
             :items="copies"
             :loading="loading"
             :statuses="statuses"
-            @make-available="id => handleSetAvailable(id)"
-            @shelve-copy="id => handleSetShelved(id)"
-            @write-off="id => handleSetWrittenOff(id)"
-            @open-edit-dialog="row => openUpdateCopyDialog(row)"
             @handle-selection-change="rows => handleSelectionChange(rows)"
-        />
+        >
+            <template #actions="{ row }">
+                <CopyTableActions 
+                    :row="row"
+                    @make-available="handleSetAvailable"
+                    @shelve-copy="handleSetShelved"
+                    @write-off="handleSetWrittenOff"
+                    @edit="openUpdateCopyDialog"
+                />
+            </template>
+        </CopyTable>
 
         <Pagination
             v-if="total > 0"
@@ -74,6 +80,7 @@ import CopyDialog from '@/components/copies/CopyDialog.vue'
 import BatchCopyDialog from '@/components/copies/BatchCopyDialog.vue'
 
 import CopyTable from '@/components/copies/CopyTable.vue'
+import CopyTableActions from '@/components/copies/CopyTableActions.vue'
 import Pagination from '@/components/common/Pagination.vue'
 
 import { useCopy } from '@/services/composables/useCopy'
@@ -186,7 +193,6 @@ const handleBatchSave = async (data) => {
 const handleBulkSetHolder = async (holderId) => {
     await bulkSetHolder(holderId, selectedIds.value)
     ElMessage.success('Постоянные места хранения установлены')
-
 }
 
 const handleBulkDelete = async () => {
@@ -201,11 +207,13 @@ const handleBulkDelete = async () => {
 const handleSetAvailable = async (id) => {
     await setAvailable(id)
     ElMessage.success('Копия доступна')
+    await getCopies()
 }
 
 const handleSetShelved = async (id) => {
     await setShelved(id)
     ElMessage.success('Копия расставлена')
+    await getCopies()
 }
 
 const handleSetWrittenOff = async (id) => {
@@ -216,6 +224,7 @@ const handleSetWrittenOff = async (id) => {
     })
     await setWrittenOff(id)
     ElMessage.success('Копия списана')
+    await getCopies()
 }
 
 onMounted(async () => {

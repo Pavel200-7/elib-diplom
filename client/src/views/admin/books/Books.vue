@@ -10,28 +10,20 @@
             @load="getBooks()"
         />
 
-        <el-table :data="books" v-loading="loading" stripe>
-            <el-table-column prop="name" label="Название" min-width="250" >
-                <template #default="{ row }">
-                    <router-link :to="`/admin/copies/${row.id}`" class="book-link">
-                        {{ row.name }}
-                    </router-link>
-                </template>    
-            </el-table-column>
-            <el-table-column prop="authorName" label="Автор" width="200" />
-            <el-table-column prop="genreName" label="Жанр" width="150" />
-            <el-table-column prop="publicationYear" label="Год" width="80" />
-            <el-table-column label="Действия" width="180" fixed="right">
-                <template #default="{ row }">
-                    <el-button link type="primary" @click="openEditDialog(row)">
-                        <el-icon><Edit /></el-icon>
-                    </el-button>
-                    <el-button link type="danger" @click="confirmDelete(row)">
-                        <el-icon><Delete /></el-icon>
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+        <BookTable 
+            :books="books"
+            :loading="loading"
+            :row-clickable="true"
+            @row-click="handleRowClick"
+        >  
+            <template #actions="{ row }">
+                <BookTableActions 
+                    :row="row"
+                    @edit="openEditDialog"
+                    @delete="confirmDelete"
+                />
+            </template>
+        </BookTable>
 
         <Pagination
             v-if="total > 0"
@@ -66,14 +58,17 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+
 
 import BookHeader from '@/components/books/BookHeader.vue'
 import BookFilter from '@/components/books/BookFilter.vue'
 import Pagination from '@/components/common/Pagination.vue'
 import BookDialog from '@/components/books/BookDialog.vue'
 import BookDeleteConfirmDialog from '@/components/books/BookDeleteConfirmDialog.vue'
-
-import { Edit, Delete } from '@element-plus/icons-vue'
+import BookTable from '@/components/books/BookTable.vue'
+import BookTableActions from '@/components/books/BookTableActions.vue'
 
 import { useAuthor } from '@/services/composables/useAuthor'
 import { useGenre } from '@/services/composables/useGenre'
@@ -81,6 +76,9 @@ import { usePublishing } from '@/services/composables/usePublishing'
 import { useLanguage } from '@/services/composables/useLanguage'
 import { useLiteratureGroup } from '@/services/composables/useLiteratureGroup.js'
 import { useBook } from '@/services/composables/useBook'
+
+const router = useRouter()
+
 
 const {
   books,
@@ -137,6 +135,10 @@ const loadDictionaries = async () => {
     ])
 }
 
+const handleRowClick = (row, column, event) => {
+    router.push(`/admin/copies/${row.id}`)
+}
+
 const openCreateDialog = () => {
     isEdit.value = false
     selectedBook.value = null
@@ -152,8 +154,10 @@ const openEditDialog = (row) => {
 const handleDialogSave = async (payload) => {
     if (isEdit.value) {
         await updateBook(payload.id, payload.data)
+        ElMessage.success('Книга обновлена')
     } else {
         await createBook(payload.data)
+        ElMessage.success('Книга создана')
     }
     
     dialogVisible.value = false
@@ -167,6 +171,7 @@ const confirmDelete = (row) => {
 
 const deleteItem = async () => {
     await deleteBook(toDelete.value.id)
+    ElMessage.success('Книга удалена')
     deleteDialogVisible.value = false
 }
 

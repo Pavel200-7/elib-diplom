@@ -189,13 +189,7 @@ public class BookServiceImpl implements BookService {
             return PageRequest.of(page, size, Sort.by("name").ascending());
         }
 
-        String sortField = switch (sortCriteria.getSortBy()) {
-            case NAME -> "name";
-            case PUBLICATION_YEAR -> "publicationYear";
-            case CREATED_AT -> "createdAt";
-            case UPDATED_AT -> "updatedAt";
-        };
-
+        String sortField = sortCriteria.getSortBy().getName();
         Sort.Direction direction = sortCriteria.getSortDirection() != null
                 ? sortCriteria.getSortDirection()
                 : Sort.Direction.ASC;
