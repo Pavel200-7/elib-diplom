@@ -63,6 +63,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router' 
+import { useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 import CopyHeader from '@/components/copies/CopyHeader.vue'
@@ -78,6 +80,9 @@ import { useCopy } from '@/services/composables/useCopy'
 import { useHolder } from '@/services/composables/useHolder.js'
 import { useBook } from '@/services/composables/useBook.js'
 
+const router = useRouter()
+const route = useRoute()
+
 const selectedIds = ref([])
 const dialogVisible = ref(false)
 const isEdit = ref(false)
@@ -86,24 +91,23 @@ const editingCopy = ref(null)
 const batchDialogVisible = ref(false)
 
 const {
- copies,
- page,
- size,
- total,
- loading,
- statuses,
- getCopies,
- createCopy,
- createCopies,
- updateCopy,
- bulkDeleteCopies,
- setAvailable,
- setShelved,
- setWrittenOff,
- bulkSetHolder,
- setFilters,
- resetFilters,
- 
+    copies,
+    page,
+    size,
+    total,
+    loading,
+    statuses,
+    getCopies,
+    createCopy,
+    createCopies,
+    updateCopy,
+    bulkDeleteCopies,
+    setAvailable,
+    setShelved,
+    setWrittenOff,
+    bulkSetHolder,
+    setFilters,
+    resetFilters,
 } = useCopy()
 
 const {
@@ -116,16 +120,15 @@ const {
   getBook,
 } = useBook()
 
-const props = defineProps({
-    id: {
-        type: String,
-        default: null
-    }
-})
 
-const bookId = props.id
+const bookId = route.params.id 
+
+const goBack = () => {
+    router.back() 
+}
 
 const handleLoad = async () => {
+    setFilters({bookId: bookId})
     await getCopies()
 }
 
@@ -217,7 +220,7 @@ const handleSetWrittenOff = async (id) => {
 
 onMounted(async () => {
     await loadDictionaries()
-    await getCopies()
+    await handleLoad()
 })
 </script>
 

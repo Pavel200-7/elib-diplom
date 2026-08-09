@@ -12,9 +12,9 @@
             >
                 <template #description>
                     <div class="stats-placeholder">
-                        <p>Количество книг на руках: <strong>0</strong></p>
+                        <!-- <p>Количество книг на руках: <strong>0</strong></p>
                         <p>Всего выдано книг: <strong>0</strong></p>
-                        <p>Активных броней: <strong>0</strong></p>
+                        <p>Активных броней: <strong>0</strong></p> -->
                         <p>Дата регистрации: <strong>{{ user?.createdAt || '-' }}</strong></p>
                     </div>
                 </template>

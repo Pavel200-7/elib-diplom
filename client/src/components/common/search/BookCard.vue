@@ -64,7 +64,6 @@ async function fetchAvailableCount() {
     loading.value = true
     try {
         const response = await getAvailableCount(props.book.id)
-        console.log(response)
         availableCount.value = response.data || 0
     } catch (error) {
         console.error('Ошибка загрузки количества доступных экземпляров', error)

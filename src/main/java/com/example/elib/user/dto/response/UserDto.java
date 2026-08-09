@@ -20,4 +20,5 @@ public class UserDto {
     String patronymic;
     LocalDate birthDate;
     UserStatus status;
+    LocalDate createdAt;
 }

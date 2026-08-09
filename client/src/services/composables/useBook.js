@@ -6,13 +6,21 @@ export function useBook() {
     const books = ref([])
 
     const page = ref(0)
-    const size = ref(20)
+    const size = ref(1)
     const total = ref(0)
 
     const filters = {
         name: '',
         authorId: null,
-        genreId: null
+        genreId: null,
+        literatureGroupId: null,
+        publishingId: null,
+        languageId: null,
+        ageRestrictions: null,
+        pagesMin: null,
+        pagesMax: null,
+        publicationYearMin: null,
+        publicationYearMax: null
     }
 
     const loading = ref(false)
@@ -86,7 +94,15 @@ export function useBook() {
             searchCriteria: {
                 name: filters.name || null,
                 authorId: filters.authorId || null,
-                genreId: filters.genreId || null
+                genreId: filters.genreId || null,
+                literatureGroupId: filters.literatureGroupId || null,
+                publishingId: filters.publishingId || null,
+                languageId: filters.languageId || null,
+                ageRestrictions: filters.ageRestrictions || null,
+                pagesMin: filters.pagesMin || null,
+                pagesMax: filters.pagesMax || null,
+                publicationYearMin: filters.publicationYearMin || null,
+                publicationYearMax: filters.publicationYearMax || null
             },
             sortCriteria: {
                 sortBy: 'NAME',
@@ -97,6 +113,8 @@ export function useBook() {
                 size: size.value
             }
         }
+
+        console.log(criteria)
         return criteria
     }
 
@@ -104,6 +122,14 @@ export function useBook() {
         filters.name = filter.name
         filters.authorId = filter.authorId
         filters.genreId = filter.genreId
+        filters.literatureGroupId = filter.literatureGroupId
+        filters.publishingId = filter.publishingId
+        filters.languageId = filter.languageId
+        filters.ageRestrictions = filter.ageRestrictions
+        filters.pagesMin = filter.pagesMin
+        filters.pagesMax = filter.pagesMax
+        filters.publicationYearMin = filter.publicationYearMin
+        filters.publicationYearMax = filter.publicationYearMax 
         page.value = 0
     }
 
@@ -111,6 +137,14 @@ export function useBook() {
         filters.name = ''
         filters.authorId = null
         filters.genreId = null
+        filters.literatureGroupId = null
+        filters.publishingId = null
+        filters.languageId = null
+        filters.ageRestrictions = null
+        filters.pagesMin = null
+        filters.pagesMax = null
+        filters.publicationYearMin = null
+        filters.publicationYearMax = null
         page.value = 0
     }
 

@@ -10,7 +10,7 @@
                 @keyup.enter="handleSearch"
             >
                 <template #append>
-                    <el-button @click="handleSearch">
+                    <el-button @click="search">
                         <el-icon><Search /></el-icon>
                     </el-button>
                 </template>
@@ -26,7 +26,8 @@
 
         <AdvancedFilters 
             v-if="showAdvancedFilters" 
-            @apply="applyFilters"
+            @apply="search"
+            @reset="resetFilters"
         />
 
         <div v-loading="loading" class="results-grid">
@@ -36,7 +37,7 @@
                 :book="book"
             />
             
-            <div v-if="!loading && books.length === 0" class="empty-state">
+            <div v-if="!loading && total === 0" class="empty-state">
                 <el-empty description="Книги не найдены" />
             </div>
         </div>
@@ -53,69 +54,58 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Search, Filter } from '@element-plus/icons-vue'
 
-import { getAll as getBooksPage } from '@/services/api/books'
+import { useBook } from '@/services/composables/useBook'
 
 import BookCard from '@/components/common/search/BookCard.vue'
 import AdvancedFilters from '@/components/common/search/AdvancedFilters.vue'
 import Pagination from '@/components/common/Pagination.vue'
 
+const {
+    books,
+    loading,
+    page,
+    total,
+    size,
+    getBooks,
+    setFilters,
+    resetFilters
+} = useBook()
+
 const route = useRoute()
 const router = useRouter()
 
-const loading = ref(false)
-const books = ref([])
-const total = ref(0)
-const page = ref(0)
-const size = ref(20)
 const searchQuery = ref(route.query.q || '')
 const showAdvancedFilters = ref(false)
+
 const currentFilters = ref({})
 
-
 const loadBooks = async () => {
-    loading.value = true
-    try {
-        const criteria = {
-            searchCriteria: {
-                name: searchQuery.value || null,
-                ...currentFilters.value
-            },
-            sortCriteria: {
-                sortBy: 'NAME',
-                sortDirection: 'ASC'
-            },
-            pageData: {
-                page: page.value,
-                size: size.value
-            }
-        }
-        const response = await getBooksPage(criteria)
-        books.value = response.data.content
-        total.value = response.data.totalElements
+    try { 
+        await getBooks()
     } catch (error) {
         ElMessage.error('Ошибка загрузки книг')
-        console.error(error)
-    } finally {
-        loading.value = false
-    }
+    } 
 }
 
 const handleSearch = () => {
-    page.value = 0
     loadBooks()
     router.replace({
         query: { q: searchQuery.value }
     })
 }
 
-const applyFilters = (filters) => {
+const search = (filters) => {
     currentFilters.value = filters
-    page.value = 0
+    const filter = {
+        name: searchQuery.value || null,
+        ...currentFilters.value
+    }
+    setFilters(filter)
     loadBooks()
 }
 

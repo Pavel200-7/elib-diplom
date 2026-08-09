@@ -41,9 +41,9 @@ import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUser } from '@/services/composables/useUser'
 
-import UserInfo from '@/components/users/user-details/UserInfo.vue'
-import UserHistoryPlaceholder from '@/components/users/user-details/UserHistoryPlaceholder.vue'
-import UserIssuePlaceholder from '@/components/users/user-details/UserIssuePlaceholder.vue'
+import UserInfo from '@/components/users/user-details/user-info/UserInfo.vue'
+import UserHistoryPlaceholder from '@/components/users/user-details/user-history/UserHistoryPlaceholder.vue'
+import UserIssuePlaceholder from '@/components/users/user-details/user-issue/UserIssue.vue'
 
 const router = useRouter()
 const route = useRoute()

@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface CirculationService {
     BookingDto issueCopy(UUID userId, UUID copyId);
-    BookingDto returnBook(UUID bookingId);
+    BookingDto returnCopy(UUID bookingId);
 }

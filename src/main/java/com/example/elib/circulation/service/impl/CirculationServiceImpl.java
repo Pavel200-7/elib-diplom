@@ -40,7 +40,7 @@ public class CirculationServiceImpl implements CirculationService {
 
     @Override
     @Transactional
-    public BookingDto returnBook(UUID bookingId) {
+    public BookingDto returnCopy(UUID bookingId) {
         log.info("Возврат книги {}", bookingId);
         BookingDto booking = bookingService.getBooking(bookingId);
         copyService.setInTransit(booking.getCopy().getId());

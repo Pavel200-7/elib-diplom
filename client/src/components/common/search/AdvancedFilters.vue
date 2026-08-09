@@ -3,7 +3,13 @@
         <el-row :gutter="20">
             <el-col :span="8">
                 <el-form-item label="Автор">
-                    <el-select v-model="localFilters.authorId" clearable filterable placeholder="Выберите автора">
+                    <el-select 
+                        v-model="localFilters.authorId" 
+                        clearable 
+                        filterable 
+                        placeholder="Выберите автора"
+                        @clear="localFilters.authorId = null"
+                    >
                         <el-option
                             v-for="author in authors"
                             :key="author.id"
@@ -16,7 +22,13 @@
             
             <el-col :span="8">
                 <el-form-item label="Жанр">
-                    <el-select v-model="localFilters.genreId" clearable filterable placeholder="Выберите жанр">
+                    <el-select 
+                        v-model="localFilters.genreId" 
+                        clearable 
+                        filterable 
+                        placeholder="Выберите жанр"
+                        @clear="localFilters.genreId = null"
+                    >
                         <el-option
                             v-for="genre in genres"
                             :key="genre.id"
@@ -29,7 +41,13 @@
             
             <el-col :span="8">
                 <el-form-item label="Издательство">
-                    <el-select v-model="localFilters.publishingId" clearable filterable placeholder="Выберите издательство">
+                    <el-select 
+                        v-model="localFilters.publishingId" 
+                        clearable 
+                        filterable 
+                        placeholder="Выберите издательство"
+                        @clear="localFilters.publishingId = null"
+                    >
                         <el-option
                             v-for="pub in publishings"
                             :key="pub.id"
@@ -44,7 +62,13 @@
         <el-row :gutter="20">
             <el-col :span="8">
                 <el-form-item label="Язык">
-                    <el-select v-model="localFilters.languageId" clearable filterable placeholder="Выберите язык">
+                    <el-select 
+                        v-model="localFilters.languageId" 
+                        clearable 
+                        filterable 
+                        placeholder="Выберите язык"
+                        @clear="localFilters.languageId = null"
+                    >
                         <el-option
                             v-for="lang in languages"
                             :key="lang.id"
@@ -57,7 +81,13 @@
             
             <el-col :span="8">
                 <el-form-item label="Группа литературы">
-                    <el-select v-model="localFilters.literatureGroupId" clearable filterable placeholder="Выберите группу">
+                    <el-select 
+                        v-model="localFilters.literatureGroupId" 
+                        clearable 
+                        filterable 
+                        placeholder="Выберите группу"
+                        @clear="localFilters.literatureGroupId = null"
+                    >
                         <el-option
                             v-for="group in literatureGroups"
                             :key="group.id"
@@ -70,7 +100,12 @@
             
             <el-col :span="8">
                 <el-form-item label="Возрастное ограничение">
-                    <el-select v-model="localFilters.ageRestrictions" clearable placeholder="Выберите ограничение">
+                    <el-select 
+                        v-model="localFilters.ageRestrictions" 
+                        clearable 
+                        placeholder="Выберите ограничение"
+                        @clear="localFilters.ageRestrictions = null"
+                    >
                         <el-option label="0+" value="ZERO_PLUS" />
                         <el-option label="6+" value="SIX_PLUS" />
                         <el-option label="12+" value="TWELVE_PLUS" />
@@ -131,7 +166,7 @@ import { getAll as getAllLanguages } from '@/services/api/dictionaries'
 import { getAll as getAllLiteratureGroups } from '@/services/api/dictionaries'
 import { ElMessage } from 'element-plus'
 
-const emit = defineEmits(['apply'])
+const emit = defineEmits(['apply', 'reset'])
 
 const localFilters = reactive({
     authorId: null,
@@ -192,7 +227,7 @@ const resetFilters = () => {
     })
     pageRange.value = [0, 2000]
     yearRange.value = [1450, 2026]
-    applyFilters()
+    emit('reset')
 }
 
 onMounted(() => {
