@@ -1,81 +1,158 @@
 <template>
-    <el-card>
-        <div class="issue-content">
-            <div class="issue-header">
-                <h3>Выдача книг пользователю</h3>
-                <el-button 
-                    type="primary" 
-                    @click="showSelector = true"
-                >
-                    <el-icon><Plus /></el-icon>
-                    Выдать книгу
-                </el-button>
-            </div>
-
-            <!-- Отображение выбранных копий -->
-            <div v-if="selectedCopies.length > 0" class="selected-copies">
-                <h4>Выбранные экземпляры:</h4>
-                <div class="copy-list">
-                    <el-tag 
-                        v-for="copy in selectedCopies" 
-                        :key="copy.id"
-                        closable
-                        @close="removeCopy(copy.id)"
-                        type="success"
-                        size="large"
+    <div class="user-issue">
+        <el-card>
+            <div class="issue-content">
+                <div class="issue-header">
+                    <h3>Выдача книг пользователю</h3>
+                    <el-button 
+                        type="primary" 
+                        @click="showSelector = true"
                     >
-                        ID: {{ copy.id }} - {{ copy.bookName || 'Книга' }}
-                    </el-tag>
+                        <el-icon><Plus /></el-icon>
+                        Выбрать экземпляр
+                    </el-button>
                 </div>
-            </div>
 
-            <div v-else class="placeholder-content">
-                <el-empty description="Нет выбранных книг">
-                    <template #description>
-                        <div class="placeholder-text">
-                            <p>Нажмите кнопку "Выдать книгу" для выбора экземпляра</p>
-                        </div>
-                    </template>
-                </el-empty>
-            </div>
+                <!-- Компонент поиска -->
+                <CopySearch 
+                    @search="handleCopyFound"
+                    @clear="handleSearchClear"
+                />
 
-            <!-- Компонент выбора -->
-            <BookCopySelector
-                v-model:visible="showSelector"
-                @select="handleCopySelect"
-            />
-        </div>
-    </el-card>
+                <!-- Информация о выбранном экземпляре -->
+                <CopyInfo 
+                    v-if="selectedCopy"
+                    :copy="selectedCopy"
+                    :issuing="loading"
+                    @issue="handleCopyIssued"
+                    @clear="handleCopyClear"
+                />
+
+                <!-- Пустое состояние -->
+                <div v-else class="placeholder-content">
+                    <el-empty description="Нет выбранной книги">
+                        <template #description>
+                            <div class="placeholder-text">
+                                <p>Выберите экземпляр через кнопку "Выбрать экземпляр" или найдите по инвентарному номеру</p>
+                            </div>
+                        </template>
+                    </el-empty>
+                </div>
+
+                <!-- Компонент выбора -->
+                <BookCopySelector
+                    v-model:visible="showSelector"
+                    @select="handleCopySelect"
+                />
+            </div>
+        </el-card>
+
+        <!-- Компонент активных выдач -->
+        <ActiveBookings 
+            :userId="userId"
+            @bookingReturned="handleBookingReturned"
+            ref="activeBookingsRef"
+        />
+    </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
+import CopySearch from '@/components/common/form/CopySearch.vue'
+import CopyInfo from '@/components/common/card/CopyInfo.vue'
 import BookCopySelector from '@/components/common/form/BookCopySelector.vue'
+import ActiveBookings from '@/components/bookings/ActiveBookings.vue'
+import { useCirculation } from '@/services/composables/useCirculation'
+
+// Определяем пропсы
+const props = defineProps({
+    userId: {
+        type: String,
+        required: true
+    }
+})
+
+const { issueCopy, loading: issuingLoading, error, loading } = useCirculation()
 
 const showSelector = ref(false)
-const selectedCopies = ref([])
+const selectedCopy = ref(null)
+const activeBookingsRef = ref(null)
+const issuing = ref(false)
 
-const handleCopySelect = (copyId) => {
-    if (!selectedCopies.value.some(copy => copy.id === copyId)) {
-        selectedCopies.value.push({
-            id: copyId,
-            bookName: `Копия ${copyId.substring(0, 8)}...`
-        })
-        ElMessage.success(`Экземпляр выбран для выдачи`)
-    } else {
-        ElMessage.warning('Этот экземпляр уже выбран')
+// Обработка найденной копии через поиск
+const handleCopyFound = (copy) => {
+    selectedCopy.value = copy
+}
+
+// Обработка очистки поиска
+const handleSearchClear = () => {
+    selectedCopy.value = null
+}
+
+// Обработка выбора из компонента-селектора
+const handleCopySelect = (copy) => {
+    if (copy && copy.id) {
+        selectedCopy.value = copy
+        ElMessage.success('Экземпляр выбран для выдачи')
     }
 }
 
-const removeCopy = (copyId) => {
-    selectedCopies.value = selectedCopies.value.filter(copy => copy.id !== copyId)
-    ElMessage.info('Экземпляр удален из списка выдачи')
+// Обработка успешной выдачи (теперь с логикой)
+const handleCopyIssued = async (copy) => {
+    if (!copy) {
+        ElMessage.warning('Сначала выберите экземпляр')
+        return
+    }
+
+    const bookName = copy.book?.name || 'Неизвестная книга'
+    const inventoryNumber = copy.inventoryNumber || 'Номер не указан'
+
+    await ElMessageBox.confirm(
+        `Вы действительно хотите выдать книгу "${bookName}" (инв. №${inventoryNumber}) пользователю?`,
+        'Подтверждение выдачи',
+        {
+            confirmButtonText: 'Выдать',
+            cancelButtonText: 'Отмена',
+            type: 'warning'
+        }
+    )
+
+    
+    // Вызов API для выдачи книги с использованием userId из пропса
+    await issueCopy(props.userId, copy.id)
+    
+    ElMessage.success(`Книга "${bookName}" успешно выдана пользователю`)
+    
+    // Очищаем выбранную копию
+    selectedCopy.value = null
+    
+    // Обновляем список активных выдач
+    if (activeBookingsRef.value) {
+        activeBookingsRef.value.reload()
+    }
+}
+
+// Очистка выбранной копии
+const handleCopyClear = () => {
+    selectedCopy.value = null
+}
+
+// Обработка возврата книги
+const handleBookingReturned = (bookingId) => {
+    ElMessage.success('Книга успешно возвращена')
+    // Дополнительные действия при возврате
 }
 </script>
 
 <style scoped>
+.user-issue {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
 .issue-content {
     padding: 20px;
 }
@@ -91,25 +168,6 @@ const removeCopy = (copyId) => {
     margin: 0;
     color: #303133;
     font-size: 18px;
-}
-
-.selected-copies {
-    padding: 20px;
-    background: #f5f7fa;
-    border-radius: 8px;
-    min-height: 80px;
-}
-
-.selected-copies h4 {
-    margin: 0 0 12px 0;
-    color: #606266;
-    font-size: 14px;
-}
-
-.copy-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
 }
 
 .placeholder-content {

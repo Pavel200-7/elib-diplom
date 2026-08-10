@@ -80,7 +80,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BookingDto> getActiveUserBookings(UUID userId) {
+    public List<BookingShortDto> getActiveUserBookings(UUID userId) {
         if (!userRepository.existsById(userId)) {
             throw new ResourceNotFoundException("Пользователь с id " + userId + " не найден.");
         }
@@ -88,7 +88,7 @@ public class BookingServiceImpl implements BookingService {
         Specification<Booking> spec = specBuilder.activeForUser(userId);
         List<Booking> bookings = bookingRepository.findAll(spec);
         return bookings.stream()
-                .map(bookingMapper::toDto)
+                .map(bookingMapper::toShortDto)
                 .toList();
     }
 

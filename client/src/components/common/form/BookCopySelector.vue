@@ -220,7 +220,7 @@ const selectBook = (book) => {
 const selectCopy = (copy) => {
     selectedCopy.value = copy
     // Сразу отправляем ID копии
-    emit('select', copy.id)
+    emit('select', copy)
     // Закрываем форму
     handleClose()
 }

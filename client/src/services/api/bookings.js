@@ -9,7 +9,7 @@ export const getUserBooking = (criteria) => {
 }
 
 export const getUserBookingsPage = (criteria) => {
-    return client.get('/api/v1/bookings/user/page', criteria)
+    return client.post('/api/v1/bookings/user/page', criteria)
 }
 
 export const getActiveUserBookings = (userId) => {

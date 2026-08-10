@@ -37,8 +37,8 @@ public class BookingController {
     }
 
     @GetMapping("/user/{userId}/active")
-    public ResponseEntity<List<BookingDto>> getActiveUserBookings(@PathVariable UUID userId) {
-        List<BookingDto> bookings = bookingService.getActiveUserBookings(userId);
+    public ResponseEntity<List<BookingShortDto>> getActiveUserBookings(@PathVariable UUID userId) {
+        List<BookingShortDto> bookings = bookingService.getActiveUserBookings(userId);
         return ResponseEntity.ok(bookings);
     }
 }

@@ -83,4 +83,8 @@ public class User extends BaseEntity {
         return personalData != null ? personalData.getBirthDate() : null;
     }
 
+    public boolean isActivated() {
+        return status.equals(UserStatus.ACTIVATED);
+    }
+
 }

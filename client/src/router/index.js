@@ -39,6 +39,12 @@ const routes = [
                 name: 'BookDetail',
                 component: () => import('@/views/BookDetailView.vue'),
                 meta: { public: true }
+            },
+            {
+                path: 'reader',
+                name: 'ReaderView',
+                component: () => import('@/views/ReaderView.vue'),
+                meta: { public: true }
             }
         ]
     },

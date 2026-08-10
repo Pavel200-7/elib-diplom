@@ -13,7 +13,7 @@ public interface BookingService {
     BookingDto makeReturning(UUID id);
     BookingDto getBooking(UUID id);
     List<BookingDto> getUserBookings(GetBookingCriteria criteria);
-    List<BookingDto> getActiveUserBookings(UUID userId);
+    List<BookingShortDto> getActiveUserBookings(UUID userId);
     List<BookingShortDto> getUserBookingsPage(GetBookingCriteria criteria);
 
 }

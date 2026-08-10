@@ -39,7 +39,6 @@ export function useCopy() {
         const responseData = await handleRequest(() => api.getCopiesPage(criteria))
         copies.value = responseData.content
         total.value = responseData.totalElements
-        console.log(copies.value)
         return responseData
     }
 
@@ -146,6 +145,39 @@ export function useCopy() {
         return criteria
     }
 
+    const getCopyByInventoryNumber = async (inventoryNumber) => {
+        const formattedNumber = formatInventoryNumber(inventoryNumber)
+        setFilters({ inventoryNumber: formattedNumber })
+        await getCopies()
+        if (copies.value && copies.value.length > 0) {
+            copy.value = copies.value[0]
+            return copy.value
+        } else {
+            copy.value = null
+            throw new Error('Экземпляр с таким инвентарным номером не найден')
+        }
+    }
+
+    const formatInventoryNumber = (input) => {
+        let cleanInput = input.trim().toUpperCase()
+        
+        if (cleanInput.startsWith('INV-')) {
+            const numberPart = cleanInput.substring(4)
+            // Проверяем что после префикса только цифры
+            if (/^\d+$/.test(numberPart)) {
+                const paddedNumber = numberPart.padStart(8, '0')
+                return `INV-${paddedNumber}`
+            }
+        }
+        
+        if (/^\d+$/.test(cleanInput)) {
+            const paddedNumber = cleanInput.padStart(8, '0')
+            return `INV-${paddedNumber}`
+        }
+        
+        return cleanInput
+    }
+
     const setFilters = (filter) => {
         filters.inventoryNumber = filter.inventoryNumber || ''
         filters.isbn = filter.isbn || ''
@@ -196,6 +228,7 @@ export function useCopy() {
         setShelved,
         setWrittenOff,
         bulkSetHolder,
+        getCopyByInventoryNumber,
 
         setFilters,
         resetFilters

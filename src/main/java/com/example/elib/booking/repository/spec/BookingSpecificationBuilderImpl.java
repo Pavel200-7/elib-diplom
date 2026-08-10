@@ -89,12 +89,12 @@ public class BookingSpecificationBuilderImpl implements BookingSpecificationBuil
                 return cb.conjunction();
             }
             if (from == null) {
-                return cb.lessThanOrEqualTo(root.get("created"), to);
+                return cb.lessThanOrEqualTo(root.get("createdAt"), to);
             }
             if (to == null) {
-                return cb.greaterThanOrEqualTo(root.get("created"), from);
+                return cb.greaterThanOrEqualTo(root.get("At"), from);
             }
-            return cb.between(root.get("created"), from, to);
+            return cb.between(root.get("createdAt"), from, to);
         };
     }
 

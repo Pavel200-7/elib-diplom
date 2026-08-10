@@ -67,14 +67,34 @@ export function useBooking() {
         return responseData
     }
 
-    const getUserBookingsPage = async () => {
-        const criteria = {
-            ...buildCriteria(),
-            page: page.value,
-            size: size.value
+    const getUserBookingsPage = async (customCriteria = null) => {
+        // Если передан customCriteria, используем его
+        let criteria
+        if (customCriteria) {
+            criteria = {
+                ...customCriteria,
+                page: customCriteria.page ?? page.value,
+                size: customCriteria.size ?? size.value
+            }
+        } else {
+            // Иначе строим из фильтров
+            criteria = {
+                ...buildCriteria(),
+                page: page.value,
+                size: size.value
+            }
         }
+        
+        // Удаляем null значения
+        Object.keys(criteria).forEach(key => {
+            if (criteria[key] === null || criteria[key] === undefined) {
+                delete criteria[key]
+            }
+        })
+        
         const responseData = await handleRequest(() => api.getUserBookingsPage(criteria))
         bookingsPage.value = responseData
+        bookings.value = responseData.content || responseData || []
         total.value = responseData.totalElements || responseData.total || 0
         return responseData
     }
@@ -92,12 +112,12 @@ export function useBooking() {
     }
 
     const setFilters = (filter) => {
-        filters.status = filter.status ?? filters.status
-        filters.userId = filter.userId ?? filters.userId
-        filters.copyId = filter.copyId ?? filters.copyId
-        filters.createdFrom = filter.createdFrom ?? filters.createdFrom
-        filters.createdTo = filter.createdTo ?? filters.createdTo
-        filters.overdueOnly = filter.overdueOnly ?? filters.overdueOnly
+        if (filter.status !== undefined) filters.status = filter.status
+        if (filter.userId !== undefined) filters.userId = filter.userId
+        if (filter.copyId !== undefined) filters.copyId = filter.copyId
+        if (filter.createdFrom !== undefined) filters.createdFrom = filter.createdFrom
+        if (filter.createdTo !== undefined) filters.createdTo = filter.createdTo
+        if (filter.overdueOnly !== undefined) filters.overdueOnly = filter.overdueOnly
         page.value = 0
     }
 

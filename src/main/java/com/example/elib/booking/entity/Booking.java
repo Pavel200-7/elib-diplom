@@ -49,6 +49,9 @@ public class Booking extends BaseEntity {
     }
 
     public static Booking makeIssue(User user, Copy copy) {
+        if (!user.isActivated()) {
+            throw new IllegalStateException("Пользователь должен быть активирован.");
+        }
         Booking booking = new Booking(user, copy);
         setIssued(booking);
         return booking;

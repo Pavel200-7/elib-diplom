@@ -21,6 +21,7 @@ app.use(router)
 app.use(ElementPlus)
 
 app.config.errorHandler = (err, vm, info) => {
+    console.log(err)
     const message = err.response?.data?.message 
         || err.message 
         || 'Произошла непредвиденная ошибка. Просьба обратится в техническую поддержку.'

@@ -38,14 +38,9 @@
                         @cancel="cancelEditing"
                     />
 
-                    <!-- Кнопка активации -->
-                    <div v-if="user.status === 'CREATED'" class="actions">
-                        <el-button 
-                            type="success" 
-                            @click="handleActivate"
-                        >
-                            Активировать пользователя
-                        </el-button>
+                    <!-- Слот для дополнительных действий (например, кнопка активации) -->
+                    <div v-if="$slots.actions" class="actions">
+                        <slot name="actions" />
                     </div>
                 </template>
                 <template v-else-if="!loading">
@@ -68,7 +63,7 @@ import UserInfoEdit from './UserInfoEdit.vue'
 import UserInfoStats from './UserInfoStats.vue'
 
 const props = defineProps(['user', 'loading'])
-const emit = defineEmits(['update', 'activate'])
+const emit = defineEmits(['update'])
 
 const isEditing = ref(false)
 const editFormRef = ref(null)
@@ -85,10 +80,6 @@ const cancelEditing = () => {
 const handleSave = async (data) => {
     await emit('update', data)
     isEditing.value = false
-}
-
-const handleActivate = async () => {
-    await emit('activate')
 }
 </script>
 

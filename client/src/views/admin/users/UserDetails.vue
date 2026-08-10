@@ -18,31 +18,45 @@
                     :user="user"
                     :loading="loading"
                     @update="handleUpdate"
-                    @activate="handleActivate"
+                >
+                    <!-- Слот для кнопки активации -->
+                    <template #actions>
+                        <div v-if="user?.status === 'CREATED'" class="actions">
+                            <el-button 
+                                type="success" 
+                                @click="handleActivate"
+                            >
+                                Активировать пользователя
+                            </el-button>
+                        </div>
+                    </template>
+                </UserInfo>
+            </div>
+
+            <!-- Страница 2: История операций -->
+            <div v-show="activeTab === 'history'" class="history-tab">
+                <UserHistory 
+                    ref="userHistoryRef"
+                    :userId="userId"
                 />
             </div>
 
-            <!-- Страница 2: История операций (заглушка) -->
-            <div v-show="activeTab === 'history'" class="history-tab">
-                <UserHistoryPlaceholder />
-            </div>
-
-            <!-- Страница 3: Выдача книг (заглушка) -->
+            <!-- Страница 3: Выдача книг -->
             <div v-show="activeTab === 'issue'" class="issue-tab">
-                <UserIssue />
+                <UserIssue :userId="userId" />
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUser } from '@/services/composables/useUser'
 
 import UserInfo from '@/components/users/user-details/user-info/UserInfo.vue'
-import UserHistoryPlaceholder from '@/components/users/user-details/user-history/UserHistoryPlaceholder.vue'
+import UserHistory from '@/components/users/user-details/user-history/UserHistory.vue'
 import UserIssue from '@/components/users/user-details/user-issue/UserIssue.vue'
 
 const router = useRouter()
@@ -50,6 +64,10 @@ const route = useRoute()
 const { getUser, updateUser, activateUser, user, loading } = useUser()
 
 const activeTab = ref('info')
+const userHistoryRef = ref(null)
+
+// Получаем userId из параметров маршрута
+const userId = computed(() => route.params.id)
 
 const goBack = () => {
     router.push({ name: 'AdminUsers' })
@@ -57,6 +75,11 @@ const goBack = () => {
 
 const handleTabChange = (tab) => {
     console.log('Tab changed to:', tab)
+    
+    // Если переключились на вкладку истории, перезагружаем данные
+    if (tab === 'history' && userHistoryRef.value) {
+        userHistoryRef.value.reload()
+    }
 }
 
 const handleUpdate = async (data) => {
@@ -75,6 +98,14 @@ const handleActivate = async () => {
     ElMessage.success('Пользователь активирован')
     return true
 }
+
+// Следим за изменением activeTab
+watch(activeTab, (newTab, oldTab) => {
+    // Если переключились на вкладку истории, перезагружаем данные
+    if (newTab === 'history' && userHistoryRef.value) {
+        userHistoryRef.value.reload()
+    }
+})
 
 onMounted(async () => {
     const id = route.params.id
@@ -96,5 +127,28 @@ onMounted(async () => {
 
 .tab-content {
     min-height: 400px;
+}
+
+.history-tab,
+.issue-tab,
+.info-tab {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.actions {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ebeef5;
 }
 </style>
