@@ -46,7 +46,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     function logout() {
         clearTokens()
-        window.location.href = AUTH_URL
     }
 
     function hasRole(role) {

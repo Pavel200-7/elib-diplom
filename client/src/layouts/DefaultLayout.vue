@@ -31,10 +31,16 @@
 import { useAuthStore } from '@/stores/auth'
 import { ElMessage } from 'element-plus'
 
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 const authStore = useAuthStore()
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 const AUTH_URL = `${API_BASE_URL}/api/v1/auth/authorize`
+
+const HOME_URL = "/"
 
 const handleLogin = () => {
     window.location.href = AUTH_URL
@@ -43,6 +49,7 @@ const handleLogin = () => {
 const handleLogout = () => {
     authStore.logout()
     ElMessage.success('Вы вышли из системы')
+    window.location.href = HOME_URL
 }
 </script>
 

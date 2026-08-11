@@ -44,7 +44,8 @@ onMounted(() => {
         const redirect = sessionStorage.getItem('redirectAfterLogin') || '/'
         sessionStorage.removeItem('redirectAfterLogin')
         
-        router.push(redirect)
+        window.location.href = redirect
+        // router.push(redirect) 
     } else {
         console.error('No tokens in URL!')
         ElMessage.error('Не получены токены авторизации')

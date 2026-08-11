@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -77,7 +78,34 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/v1/auth/**").permitAll()
 
-                        .anyRequest().permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/authors", "/api/v1/authors/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/books", "/api/v1/books/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/books/page").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/bookings", "/api/v1/bookings/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/bookings/user", "/api/v1/bookings/user/**").authenticated()
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/countries", "/api/v1/countries/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/genres", "/api/v1/genres/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/holders", "/api/v1/holders/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/languages", "/api/v1/languages/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/literature-groups", "/api/v1/literature-groups/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/publishings", "/api/v1/publishings/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/literature-groups", "/api/v1/literature-groups**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET,"/api/v1/users/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/users/**").authenticated()
+
+
+
+                        .anyRequest().hasAnyRole(UserRoles.ADMIN.getName())
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
