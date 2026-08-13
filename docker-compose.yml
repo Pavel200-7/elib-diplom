@@ -10,40 +10,53 @@ services:
       - "80:80"
     networks:
       - app-net
+    depends_on:
+      - client
+    command: >
+      sh -c "sleep 20 && nginx -g 'daemon off;'"
 
-#  client:
-#    build: ./client
-#    container_name: client
-#    networks:
-#      - app-net
-#    depends_on:
-#      - service
+  client:
+    build: ./client
+    container_name: client
+    environment:
+      - VITE_API_BASE_URL=http://localhost
+      - VITE_AUTH_URL=http://localhost/api/v1/auth/authorize
+    networks:
+      - app-net
+    depends_on:
+      - service
 
   # ============================================
   # SERVICE
   # ============================================
-#  service:
-#    build: .
-#    container_name: service
-#    environment:
-#      - SERVER_PORT=8080
-#      - DB_URL=jdbc:postgresql://postgres:5432/service_db
-#      - DB_USERNAME=dbuser
-#      - DB_PASSWORD=password
-#      - KEYCLOAK_ISSUER_URI=http://localhost/auth/realms/oAuth
+  service:
+    build: .
+    container_name: service
+    environment:
+      - SERVER_PORT=8080
+      - DB_URL=jdbc:postgresql://postgres:5432/service_db
+      - DB_USERNAME=dbuser
+      - DB_PASSWORD=password
+
+      - KEYCLOAK_ISSUER_URI=http://localhost/auth/realms/oAuth
+      - DOCKER_KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/oAuth
+
+#      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/oAuth
 #      - DOCKER_KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/oAuth
-#      - KEYCLOAK_CLIENT_ID=myclient
-#      - KEYCLOAK_CLIENT_SECRET=sYXnZMAiSY4ouudztjv73iHyPr5H0dQC
-#      - MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,info
-#      - MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS=always
-#      - MANAGEMENT_SECURITY_ENABLED=false
-#      - BACKEND_CALLBACK_URI=http://localhost/api/v1/auth/callback
-#      - FRONTEND_REDIRECT_URI=http://localhost/callback
-#    networks:
-#      - app-net
-#    depends_on:
-#      - keycloak
-#      - postgres
+
+      - KEYCLOAK_CLIENT_ID=myclient
+      - KEYCLOAK_CLIENT_SECRET=sYXnZMAiSY4ouudztjv73iHyPr5H0dQC
+      - MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,info
+      - MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS=always
+      - MANAGEMENT_SECURITY_ENABLED=false
+      - BACKEND_CALLBACK_URI=http://localhost/api/v1/auth/callback
+      - FRONTEND_REDIRECT_URI=http://localhost/callback
+      - ACTIVE_PROFILES=docker
+    networks:
+      - app-net
+    depends_on:
+      - keycloak
+      - postgres
 
   # ============================================
   # KEYCLOAK

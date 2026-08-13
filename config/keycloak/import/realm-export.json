@@ -705,6 +705,7 @@
       "secret": "sYXnZMAiSY4ouudztjv73iHyPr5H0dQC",
       "redirectUris": [
         "http://localhost:8080/*",
+        "http://localhost/callback",
         "http://localhost:5173/*",
         "http://localhost/*",
         "http://localhost:5173/callback"
@@ -1650,8 +1651,7 @@
   },
   "eventsEnabled": false,
   "eventsListeners": [
-    "jboss-logging",
-    "my-event-listener"
+    "jboss-logging"
   ],
   "enabledEventTypes": [
     "UPDATE_CONSENT_ERROR",

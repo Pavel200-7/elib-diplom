@@ -32,26 +32,6 @@ public class SecurityConfig {
 
     private final SecurityConfigProperties properties;
 
-//    @Bean
-//    public ClientRegistrationRepository clientRegistrationRepository() {
-//        return new InMemoryClientRegistrationRepository(
-//                ClientRegistration.withRegistrationId("keycloak")
-//                        .clientId(properties.getClientId())
-//                        .clientSecret(properties.getClientSecret())
-//                        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-//                        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-//                        .redirectUri("http://localhost:8085/login/oauth2/code/keycloak")
-//                        .scope("openid", "profile", "email")
-//                        .authorizationUri(properties.getOutUri().concat("/protocol/openid-connect/auth"))
-//                        .tokenUri(properties.getDockerUri().concat("/protocol/openid-connect/token"))
-//                        .jwkSetUri(properties.getDockerUri().concat("/protocol/openid-connect/certs"))
-//                        .userInfoUri(properties.getDockerUri().concat("/protocol/openid-connect/userinfo"))
-//                        .userNameAttributeName("preferred_username")
-//                        .clientName("Keycloak")
-//                        .build()
-//        );
-//    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
             throws Exception {

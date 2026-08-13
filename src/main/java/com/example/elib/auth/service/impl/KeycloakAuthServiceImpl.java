@@ -52,6 +52,7 @@ public class KeycloakAuthServiceImpl implements KeycloakAuthService {
         body.add("redirect_uri", keycloakConfig.getBackendCallbackUri());
         body.add("grant_type", "authorization_code");
 
+        log.info("Мы ищем ответа тут {}", keycloakConfig.getDockerTokenUri());
         return webClient.post()
                 .uri(keycloakConfig.getDockerTokenUri())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
